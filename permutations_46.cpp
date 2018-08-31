@@ -11,6 +11,8 @@ private:
 			isVisit[i] = true;
 			temp.push_back(nums[i]);
 			backtrack(res, temp, nums, isVisit);
+			// attension: after a specific number is finished counting, 
+			// one need to pop it out, and set the flag isVisit to flase
 			isVisit[i] = false;
 			temp.pop_back();
 		}
