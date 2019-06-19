@@ -26,8 +26,17 @@ int partition(std::vector<_Tf>& vec, int left, int right) {
 					  // Guess: the largest element among the ones that are smaller than pivot
 	_Tf pivot = vec[right]; // Right now, the pivot is the right one.
 
+
+	/* Note:
+	 * This algorithm is brilliant!
+	 * at each step, it can be guaranteed that,
+	 * after the swap, all the elements that are right to the i and left to the j,
+	 * i.e., elements belong to the region (i, j), are larger than pivot 
+	 */
+
 	for (int j = left; j < right; j++) {
-		if (vec[j] <= pivot) { // Note: make sure it's "<=" here.
+		if (vec[j] <= pivot) { // Note 1: make sure it's "<=" here.
+							   // Note 2: if one just change it to ">=", then it will sort the vector in descending order
 			i++; // TODO: figure our the intuition here.
 			std::swap(vec[i], vec[j]);
 		}
