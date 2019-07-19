@@ -9,32 +9,9 @@
  *         this->left = this->right = NULL;
  *     }
  * }
- * Given a binary tree, return all root-to-leaf paths.
- *
- * --------------- Example ------------------
- * Example 1:
- *
- * Input：{1,2,3,#,5}
- * Output：["1->2->5","1->3"]
- * Explanation：
- *   1
- *  /  \
- * 2    3
- * \
- *  5
- * Example 2:
- *
- * Input：{1,2}
- * Output：["1->2"]
- * Explanation：
- *   1
- *  /   
- * 2
- * 
  */
 
-
-// Method I: traverse
+/* Method I: traversal in recursion */
 
 class Solution {
 public:
@@ -42,27 +19,103 @@ public:
      * @param root: the root of the binary tree
      * @return: all root-to-leaf paths
      */
-    vector<string> binaryTreePaths(TreeNode * root) {
-        // write your code here
-        if (!root) return std::vector<std::string>{};
-        std::stack<TreeNode*> stk;
-        stk.push(root);
-        std::vector<std::string> res;
-        std::vector<int> cur_vec_int;
-        while ( !stk.empty() ) {
-        	TreeNode* cur_node = stk.top();
-        	cur_vec_int.push_back(cur_node->val);
-        } 
-    }
-
     std::string convert_vec_int_2_str(std::vector<int>& vec_int) {
     	std::string res = "";
     	for (auto& ele_int : vec_int) {
-    		res += stoi( ele_int.c_str() );
+    		res += std::to_string( ele_int );
     		res += "->";
     	}
     	// it's guaranteed that res would not be empty
-    	res.substring(0, res.length() - 2);
+    	res = res.substr(0, res.length() - 2);
     	return res;
     }
+
+    void dfs(std::vector<std::string>& res, 
+    		 TreeNode* node, 
+    		 std::vector<int>& cur_vec_int)
+    {	
+    	// It is guaranteed that root is not empty
+        cur_vec_int.push_back(node->val);
+
+    	if (!node->left && !node->right) {
+    		res.push_back( convert_vec_int_2_str(cur_vec_int) );
+    		return;
+    	}
+
+    	if (node->left) {
+    		this->dfs(res, node->left, cur_vec_int);
+    		cur_vec_int.pop_back(); // Note: we have to pop it here, not at the exit entrance,
+    								// 	     as not only the leaf nodes need to be popped out,
+    								//	     every step needs to be backtracked.
+    	}
+
+    	if (node->right) {
+    		this->dfs(res, node->right, cur_vec_int);
+    		cur_vec_int.pop_back(); // Note: same as above
+    	}
+
+    }
+
+
+    vector<string> binaryTreePaths(TreeNode * root) {
+        if (!root) return std::vector<std::string>{};
+        std::vector<std::string> res;
+        std::vector<int> cur_vec_int;
+
+        this->dfs(res, root, cur_vec_int);
+        return res;
+    }
+
+};
+
+
+/* Method II: devide-and-conquer in recursion */
+
+class Solution {
+public:
+    /**
+     * @param root: the root of the binary tree
+     * @return: all root-to-leaf paths
+     */
+
+    std::vector<std::string> devide_and_conquer(TreeNode* node) {	
+    	// It is guaranteed that node is not empty
+    	if (!node->left && !node->right) {
+    		std::vector<std::string> res;
+    		res.push_back( std::to_string(node->val) );
+    		return res;
+    	}
+
+    	// init two string vectors to empty ones
+    	std::vector<std::string> res_left{};
+    	std::vector<std::string> res_right{};
+
+    	if (node->left) {
+    		res_left = devide_and_conquer(node->left);
+    		for (auto& str_ele : res_left) {
+    			str_ele = std::to_string(node->val) + "->" + str_ele;
+    		}
+    	}
+
+    	if (node->right) {
+    		res_right = devide_and_conquer(node->right);
+    		for (auto& str_ele : res_right) {
+    			str_ele = std::to_string(node->val) + "->" + str_ele;
+    		}
+    	}
+
+    	// combine res_left and res_right
+    	res_left.insert( res_left.end(), res_right.begin(), res_right.end() );
+
+    	return res_left;
+
+    }
+
+
+    vector<string> binaryTreePaths(TreeNode * root) {
+        if (!root) return std::vector<std::string>{};
+        std::vector<std::string> res = devide_and_conquer(root);
+        return res;
+    }
+
 };

@@ -14,6 +14,20 @@
 
 class Solution {
 public:
+
+    std::vector<std::string> parse_str_with_delimiter(std::string str, std::string delimeter) {
+        std::vector<std::string> parsed_str_vec;
+        size_t pos = 0;
+        std::string token;
+
+        while ( ( pos = str.find(delimeter) ) != std::string::npos ) {
+            token = str.substr(0, pos);
+            parsed_str_vec.push_back(token);
+            str.erase(0, pos + delimeter.length());
+        }
+
+        return parsed_str_vec;
+    }
     /**
      * This method will be invoked first, you should design your own algorithm 
      * to serialize a binary tree which denote by a root node to a string which
@@ -27,23 +41,27 @@ public:
         q.push(root);
         while (!q.empty()) {
         	int cur_size = q.size();
+            
         	for (int i = 0; i < cur_size; i++) {
 	            TreeNode* cur_node = q.front();
 	            q.pop();
-	            res += std::to_string(q.val) + ",";
+                if (!cur_node) {
+                    res += "#,";
+                    continue;
+                } else res += std::to_string(cur_node->val) + ",";
+	            
+	            if (cur_node->left) q.push(cur_node->left);
+                else q.push(NULL);
 
-	            if (cur_node->left) q.push(node->left);
-	            else res += "#,";
-
-	            if (cur_node->right) q.push(node->right);
-	            else res += "#,";
+	            if (cur_node->right) q.push(cur_node->right);
+                else q.push(NULL);
         	}
         }
 
         // erase the tailing "," and close it by "}"
-        res.erase( str.end()-1 );
+        res.erase( res.end()-1 );
         res += "}";
-
+        
         return res;
     }
 
@@ -54,22 +72,66 @@ public:
      * designed by yourself, and deserialize it here as you serialize it in 
      * "serialize" method.
      */
-    TreeNode * deserialize(string &data) {
+    TreeNode* deserialize(string &data) {
         // write your code here
     	if (data == "{}") return NULL;
 
     	TreeNode* dummy(0);
         // take the the part with out "{}"
-        std::string data_without_bracket = data;
-        data_without_bracket = data_without_bracket.substr(1, data_without_bracket.size() - 2);
+        std::string data_without_bracket = data.substr(1, data.size() - 2);
 
-        int cur_level = 0; // indicate the current level of the tree
-        int node_num_in_cur_lv = 0; // indicate the number of node in current tree level
-        for (int i = 0; i < data_without_bracket.size(); i+=2) { // in each step += 2, to skip the ","
-        	int cur_val = std::atoi( data_without_bracket[i].c_str() );
-        	TreeNode* cur_node = new TreeNode(cur_val);
+        std::vector<std::string> parsed_data_vec = parse_str_with_delimiter(data_without_bracket, ",");
+        int parsed_vec_size = parsed_data_vec.size();
+        int cur_pos = 0; // maintain the pos at parsed_data_vec;
+        int cur_val = std::atoi( parsed_data_vec[cur_pos].c_str() );
+        TreeNode* root = new TreeNode(cur_val);
+
+        // Using level traverse BFS
+        std::queue<TreeNode*> q;
+        q.push(root);
+
+
+
+        bool is_left_child = true;
+        cur_pos++; // move from pos 0 to 1, as we already process the very first one to root
+        while ( !q.empty() ) {
+            int cur_level_size = q.size();
+            for (int i = 0; i < cur_level_size; ) { // an unusual choice, do not increment i
+                
+                // a return criteria
+                if (cur_pos >= parsed_vec_size) return root;
+
+                TreeNode* cur_node = q.front();
+                if ( parsed_data_vec[cur_pos] == "#" ) {
+                    
+                    if (is_left_child) {
+                        cur_node->left = NULL;
+                    } else {
+                        cur_node->right = NULL;
+                        q.pop(); // cur_node is processed completedly, pop it out
+                        i++; // process next node in the queue
+                    }
+
+                } else { // it is a number in cur_pos
+                    cur_val = std::atoi( parsed_data_vec[cur_pos].c_str() );
+                    TreeNode* cur_child = new TreeNode(cur_val);
+
+                    // based on the val of is_left_child
+                    if (is_left_child) {
+                        cur_node->left = cur_child;
+                    } else {
+                        cur_node->right = cur_child;
+                        q.pop();
+                        i++;
+                    }
+                    q.push(cur_child);
+                }
+
+                is_left_child = !is_left_child;
+                cur_pos++; // prepare to process next pos at parsed_data_vec
+            }
         }
-    }
-
-    std::vector<string> str_vec()
+        
+        return 0;
+    }  
 };
