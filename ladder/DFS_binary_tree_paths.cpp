@@ -52,6 +52,14 @@ public:
         while ( !stk.empty() ) {
         	TreeNode* cur_node = stk.top();
         	cur_vec_int.push_back(cur_node->val);
+
+        	if (cur_node->left) stk.push(cur_node->left);
+        	else if (cur_node->right) stk.push(cur_node->left)
+        	else {
+        		stk.pop(); // get rid of the cur_node from the stack, and return
+
+
+        	}
         } 
     }
 
