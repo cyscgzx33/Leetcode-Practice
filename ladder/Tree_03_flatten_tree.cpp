@@ -34,7 +34,8 @@ public:
             root->left = NULL;
         }
 
-        // According to the pre-order, root -- left -- right
+        // According to the pre-order: root -- left -- right
+        // then, the opposite order is (which we need to care here): right -- left -- root
         // First check right, then left, last root
         if (right_last) return right_last;
         if (left_last) return left_last;
@@ -57,5 +58,46 @@ public:
 
         daq_helper(root);
         return;
+    }
+};
+
+
+// First rep
+class Solution {
+public:
+    /**
+     * @intuition: reconstruct the tree and return the last node in preorder
+     * @param root: a TreeNode, the root of the binary tree
+     * @return: last node in preorder
+     */
+    TreeNode* daq_helper(TreeNode* root) {
+        if (!root) return NULL;
+
+        TreeNode* left_last = daq_helper(root->left);
+        TreeNode* right_last = daq_helper(root->right);
+
+        // important: connection
+        // need to check if left_last is not empty, otherwise no need to connect
+        if (left_last) {
+            left_last->right = root->right;
+            root->right = root->left;
+            root->left = NULL;
+        }
+
+        // According to pre-order: root -- left -- right
+        // we want the opposite way to backtrack: right -- left -- root
+        // Here we return the (left or right subtree) last node
+        if (right_last) return right_last;
+        else if (left_last) return left_last;
+        else return root;
+    }
+
+    /**
+     * @param root: a TreeNode, the root of the binary tree
+     * @return: nothing
+     */
+    void flatten(TreeNode * root) {
+        // write your code here
+        daq_helper(root);
     }
 };
