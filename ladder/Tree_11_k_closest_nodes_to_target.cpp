@@ -103,6 +103,25 @@ public:
 		return target - lower_bound_stack.top()->val < upper_bound_stack.top()->val - target;
 	}
 
+	void trimStack(std::stack<TreeNode*>& upper_bound_stack, 
+				   std::stack<TreeNode*>& lower_bound_stack,
+				   TreeNode*& lower_bound,
+				   TreeNode*& upper_bound) 
+	{
+		if (lower_bound) {
+    		while (lower_bound_stack.top() != lower_bound) lower_bound_stack.pop();
+    	}
+    	else {
+    		while ( !lower_bound_stack.empty() ) lower_bound_stack.pop();
+    	}
+
+    	if (upper_bound) {
+    		while (upper_bound_stack.top() != upper_bound) upper_bound_stack.pop();
+    	}
+    	else {
+    		while ( !upper_bound_stack.empty() ) upper_bound_stack.pop();
+    	}
+	}
     /**
      * @param root: the given BST
      * @param target: the given target
@@ -119,19 +138,7 @@ public:
 
     	// process the stacks such that if lower/upper bound exists, the stack top should be equal to them
     	// AND IF lower/upper bound doesn't exists, empty the stack
-    	if (lower_bound) {
-    		while (lower_bound_stack.top() != lower_bound) lower_bound_stack.pop();
-    	}
-    	else {
-    		while ( !lower_bound_stack.empty() ) lower_bound_stack.pop();
-    	}
-
-    	if (upper_bound) {
-    		while (upper_bound_stack.top() != upper_bound) upper_bound_stack.pop();
-    	}
-    	else {
-    		while ( !upper_bound_stack.empty() ) upper_bound_stack.pop();
-    	}
+    	trimStack(upper_bound_stack, lower_bound_stack, lower_bound, upper_bound);
 
     	// loop k times and obtain the res
     	std::vector<int> res;
