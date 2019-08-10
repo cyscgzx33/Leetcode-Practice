@@ -23,8 +23,8 @@ public:
 			}
 		}
 
-		rainbowSort()
-
+		rainbowSort(nums, nums_start, nums_left - 1, colors_start, colors_mid);
+		rainbowSort(nums, nums_right + 1, nums_end, colors_mid + 1, colors_end);
 	}
 
     /**
@@ -34,6 +34,6 @@ public:
      */
     void sortColors2(vector<int> &colors, int k) {
         // write your code here
-    	quickSort(colors, 0, colors.size());
+    	quickSort(colors, 0, colors.size() - 1, 1, k);
     }
 };
