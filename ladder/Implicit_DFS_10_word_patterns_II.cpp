@@ -20,17 +20,20 @@ public:
 
 		for (int i = 0; i < str.size(); i++) {
 			// Note: important to check
-			std::string cur_word = pattern.substr(0, i + 1);
+		std::string cur_word = str.substr(0, i + 1);
 			if (used.count(cur_word) > 0) continue;
 
 			used.insert(cur_word);
 			mapping[cur_char] = cur_word;
-			if dfs(pattern.substr(1), str.substr( cur_word.size() ), used, mapping) return true;
+			if ( dfs(pattern.substr(1), str.substr( cur_word.size() ), used, mapping) ) return true;
 			used.erase(cur_word);
 			mapping.erase(cur_char);
 		}
+		
+		return false;
 
 	}
+	
     /**
      * @param pattern: a string,denote pattern string
      * @param str: a string, denote matching string
