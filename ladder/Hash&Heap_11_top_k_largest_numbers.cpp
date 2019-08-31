@@ -16,6 +16,9 @@ public:
      */
     void add(int num) {
         // write your code here
+        pq_.push(num);
+        size_++;
+        if (size_ > k_) pq_.pop();  
     }
 
     /*
@@ -23,6 +26,19 @@ public:
      */
     vector<int> topk() {
         // write your code here
+        std::vector<int> topk;
+        int n = pq_.size();
+        for (int i = 0; i < k_ && i < n; i++) {
+            topk.push_back( pq_.top() );
+            pq_.pop();
+        }
+
+        for (int i = 0; i < n; i++) {
+            pq_.push( topk[i] );
+        }
+
+        std::sort( topk.begin(), topk.end(), Comparator );
+        return topk;
     }
 private:
     int k_;

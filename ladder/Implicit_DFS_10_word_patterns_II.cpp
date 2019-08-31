@@ -20,7 +20,7 @@ public:
 
 		for (int i = 0; i < str.size(); i++) {
 			// Note: important to check
-		std::string cur_word = str.substr(0, i + 1);
+			std::string cur_word = str.substr(0, i + 1);
 			if (used.count(cur_word) > 0) continue;
 
 			used.insert(cur_word);
