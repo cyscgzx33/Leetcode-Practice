@@ -6,64 +6,37 @@ public:
      */
     bool splitArraySameAverage(vector<int> &A) {
         // write your code here
-        
-        std::sort( A.begin(), A.end() );
-        
-        int len_A = A.size(), len_B = 0;
-        
-        int sum_A = 0;
-        for (auto& num : A)
+        int len_A = A.size(), len_half_A = len_A / 2, sum_A = std::accumulate( A.begin(), A.end(), 0 );
+        bool isSplit = false;
+        for (int i = 1; i <= len_half_A && isSplit == false; i++)
         {
-            sum_A += num;
-            std::cout << num << ", ";
+        	if ( sum_A * i % len_A == 0 )
+        		isSplit = true;
         }
-        std::cout << std::endl;
 
-        double avg_A = double(sum_A) / len_A;
-        double sum_B = 0, avg_B = 0;
-        int right = std::lower_bound(A.begin(), A.end(), avg_A) - A.begin();
-        int left = right - 1;
-        std::vector<bool> used(len_A, false);
+        if (isSplit == false)
+        	return false;
 
-        while ()
+        // dp[i] indicates that if choosing i nums in array A, what are all the possible sums could be 
+        std::vector<std::unordered_set<int>> dp(len_half_A + 1);
+        dp[0].insert(0);
+        for (int num : A)
         {
-        	int next_target = avg_A * len_B - cur_choice;
-        	int next_idx = std::lower_bound(A.begin(), A.end(), avg_A) - A.begin();
-        	if ( !used[next_idx] )
+        	for (int i = len_half_A; i >= 1; i--)
         	{
-
+        		for ( auto psb_sum : dp[i-1] )
+        		{
+        			dp[i].insert(psb_sum + num);
+        		}
         	}
         }
 
-        while (left >= 0 && right < len_A)
-        {   
-            if (avg_B < avg_A)
-            {
-                sum_B += A[right];
-                right++;
-            }
-            else if (avg_B == avg_A)
-            {
-                if (len_B < len_A)
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                sum_B += A[left];
-                left--;
-            }
-            
-            len_B++;
-            avg_B = double(sum_B) / len_B;
-        }
-        
-        if (avg_B == avg_A)
+        for (int i = 1; i <= len_half_A; i++)
         {
-            if (len_B < len_A)
-                return true;
+        	if ( sum_A * i % len_A == 0 && dp[i].count(sum_A * i / len_A) > 0 )
+        		return true;
         }
+
         return false;
     }
 };
