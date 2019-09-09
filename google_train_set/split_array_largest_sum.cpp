@@ -1,3 +1,4 @@
+// approach 1.0: binary search (version leetcode)
 class Solution {
 public:
     int splitArray(vector<int>& nums, int m) {
@@ -21,30 +22,95 @@ public:
                     dp[i][j] = min( dp[i][j], max( dp[k][j - 1], pf_sums[i] - pf_sums[k] ) );
             }
         }
-
         return int(dp[n][m]);
     }
 };
 
-// solution
+// approach 1.1: binary search (version jiuzhang)
 class Solution {
 public:
     int splitArray(vector<int>& nums, int m) {
-        int n = nums.size();
-        vector<vector<long>> f(n + 1, vector<long>(m + 1, INT_MAX));
-        vector<long> sub(n + 1, 0);
-        for (int i = 0; i < n; i++) {
-            sub[i + 1] = sub[i] + nums[i];
+        long long l = 0, r = 0;
+        long long n = nums.size();
+        
+        // init l as max among nums
+        // init r as sum of nums
+        for (long long num : nums)
+        {
+            r += num;
+            if (num > l)
+                l = num;
         }
-        f[0][0] = 0;
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= m; j++) {
-                for (int k = 0; k < i; k++) {
-                    f[i][j] = min(f[i][j], max(f[k][j - 1], sub[i] - sub[k]));
+        
+        while ( (long long)(l + 1) < (long long)(r) )
+        {
+            long long mid = (l + r) / 2;
+            long long sum = 0;
+            int count = 1;
+            for (long long num : nums)
+            {
+                if (sum + num > mid)
+                {
+                    count++;
+                    sum = num;
                 }
+                else
+                    sum += num;
+            }
+            
+            if (count <= m)
+                r = mid;
+            else
+                l = mid;
+        }
+    
+        // finally check l and r
+        long long sum = 0;
+        int count = 1;
+        for (long long num : nums)
+        {
+            if (sum + num > l)
+            {
+                count++;
+                sum = num;
+            }
+            else
+                sum += num;
+        }
+        
+        if (count <= m)
+            return l;
+        else
+            return r;
+    }
+};
+
+
+// approach 2.0: dp
+class Solution {
+public:
+    int splitArray(vector<int>& nums, int m) {
+        long n = nums.size();
+        
+        // define dp[i][j] as: 
+        // within nums[0, ..., i) taken into j parts, what is the answer
+        // thus, it needs +1 for both sides naturally
+        std::vector<std::vector<long>> dp( n + 1, std::vector<long>(m + 1, LONG_MAX) );
+        std::vector<long> pf_sums(n + 1, 0);
+        // start iteration
+        for (int i = 0; i < n; i++)
+            pf_sums[i + 1] = pf_sums[i] + nums[i]; // pf mean prefix
+        // init dp
+        dp[0][0] = 0;
+        for (int i = 1; i <= n; i++)
+        {
+            for (int j = 1; j <= m; j++)
+            {
+                for (int k = 0; k < i; k++)
+                    dp[i][j] = min( dp[i][j], max( dp[k][j - 1], pf_sums[i] - pf_sums[k] ) );
             }
         }
-        return f[n][m];
+        return int(dp[n][m]);
     }
 };
 
