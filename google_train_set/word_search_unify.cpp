@@ -25,7 +25,6 @@ public:
             return false;
         if ( board[x][y] != word[idx] )
             return false;
-        // std::cout << "x = " << x << ", y = " << y << ", idx = " << idx << std::endl;
         visited[x][y] = true;
     	for (int i = 0; i < 4; i++)
     	{
