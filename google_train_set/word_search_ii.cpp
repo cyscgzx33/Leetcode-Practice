@@ -40,7 +40,6 @@ public:
 	}
 
     vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
-
     	// exception check
     	if (board.size() == 0 || board[0].size() == 0) 
     		return {};
