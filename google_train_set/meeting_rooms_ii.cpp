@@ -14,15 +14,22 @@ public:
 
         for (int i = 1; i < intervals.size(); i++)
         {
-        	int tr = res.back()[1];
         	int sl = intervals[i][0], sr = intervals[i][1];
-        	if (sl >= tr)
-        		res.back()[1] = sl;
-        	else
+        	bool found_room = false;
+        	for (int j = 0; j < res.size(); j++)
         	{
-        		
+        		int tr = res[j][1];
+        		if (sl >= tr)
+        		{
+        			res[j][1] = sr;
+        			found_room = true;
+        			break;
+        		}
         	}
+        	if (found_room == false)
+        		res.push_back( intervals[i] );
         }
 
+        return res.size();
     }
 };
