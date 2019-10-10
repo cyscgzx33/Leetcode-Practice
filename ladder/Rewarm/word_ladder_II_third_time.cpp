@@ -4,23 +4,18 @@ public:
 										  std::unordered_set<std::string>& dict)
 	{
 		std::vector<std::string> next_words;
-		// std::cout << "cur_word = " << cur_word << ", next_words = {";
-		for (char c = 'a'; c < 'z'; c++)
+		for (char c = 'a'; c <= 'z'; c++) // it's c <= 'z' !!!!!!!!!!!!
 		{
 			for (int i = 0; i < cur_word.size(); i++)
 			{	
+				if ( c == cur_word[i] )
+					continue;
 				std::string new_word = cur_word;
 				new_word[i] = c;
-				if (dict.count(next_word) > 0)
-				{
-					// std::cout << next_word << ", ";
+				if (dict.count(new_word) > 0)
 					next_words.push_back(new_word);
-				}
 			}
 		}
-
-		// std::cout << "}" << std::endl;
-
 		return next_words;
 	}
 
@@ -85,15 +80,12 @@ public:
     vector<vector<string>> findLadders(string beginWord, string endWord, vector<string>& wordList) {
         
     	std::unordered_set<std::string> dict( wordList.begin(), wordList.end() );
+        dict.insert(beginWord);
         std::unordered_map<std::string, int> dist_map{ {endWord, 1} };
 
         // construct the dist_map via bfs
         bfs(endWord, beginWord, dict, dist_map);
-        
-        // for (auto it = dist_map.begin(); it != dist_map.end(); it++)
-        // 	std::cout << "{word, int} = {" << it->first << ", " << it->second << "}\n";
 
-        // std::cout << "dist_map.size() = " << dist_map.size() << std::endl; 
         // traverse the dist_map and find the path via dfs
         std::vector<std::vector<std::string>> paths;
         std::vector<std::string> path{ {beginWord} };
