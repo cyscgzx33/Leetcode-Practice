@@ -9,8 +9,7 @@ public:
     int backPackII(int m, vector<int> &A, vector<int> &V) {
         // write your code here
         int sz = A.size();
-    	std::vector<std::vector<int>> dp( sz, std::vector<int>(m, 0) );
-
+    	std::vector<std::vector<int>> dp( sz + 1, std::vector<int>(m + 1, 0) );
 
     	for (int i = 1; i <= sz; i++)
     	{
@@ -19,10 +18,10 @@ public:
     			if ( j < A[i - 1] )
     				dp[i][j] = max(dp[i - 1][j], 0);
     			else
-    				dp[i][j] = max( dp[i - 1][j], dp[i - 1][ j - A[i - 1] ] + A[i - 1] * V[i - 1] );
+    				dp[i][j] = max( dp[i - 1][j], dp[i - 1][ j - A[i - 1] ] + V[i - 1] );
     		}
     	}
-
+        
     	return dp[sz][m];
     }
 };
