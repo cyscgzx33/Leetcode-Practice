@@ -63,6 +63,6 @@ public:
     		days++;
     	}
 
-    	return num_p == 0 ? days : -1;
+    	return num_p == 0 ? days -1 : -1;
     }
 };
