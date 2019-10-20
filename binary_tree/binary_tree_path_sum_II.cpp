@@ -64,6 +64,20 @@ public:
 
 /* M2: using a buffer to save some space complexity */
 
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+
 class Solution {
 public:
 
@@ -105,10 +119,10 @@ public:
     vector<vector<int>> binaryTreePathSum2(TreeNode * root, int target) {
         // write your code here
         if (root == nullptr)
-        	return paths;
+        	return {};
     	std::vector<std::vector<int>> paths;
     	std::vector<int> buffer;
-    	findPath(root, target, 0, buffer, paths);
+    	findPaths(root, target, 0, buffer, paths);
     	return paths;
     }
 };
