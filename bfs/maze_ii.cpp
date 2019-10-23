@@ -51,6 +51,12 @@ public:
     }
 };
 
+/* rewarm: 10/22/2019: 
+   note-1, no visit map; 
+   note-2, necessary to init dists map; 
+   note-3, init of queue should be the basic way 
+   */
+
 class Solution {
 public:
 	int dx[4] = {1, 0, -1, 0};
