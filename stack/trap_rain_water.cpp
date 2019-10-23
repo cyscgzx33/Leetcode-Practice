@@ -18,22 +18,23 @@ public:
 
         for (int i = 0; i < height.size(); i++)
         {
-            if ( stk.size() == 0 || height[ stk.top() ] >= height[i] )
-                stk.push(i);
-            else
+            while ( stk.size() > 0 && height[ stk.top() ] < height[i] )
             {
-                while ( stk.size() > 0 && height[ stk.top() ] < height[i] )
-                {
-                    int last_idx = stk.top();
-                    stk.pop();
-                    if (stk.size() == 0)
-                        break;
-                    int dist = i - stk.top() - 1;
-                    int hgt_diff = min( height[i], height[stk.top()] ) - height[last_idx];
-                    water += dist * hgt_diff;
-                }
-                stk.push(i);
+                int top_idx = stk.top();
+                stk.pop();
+
+                // important check
+                if (stk.size() == 0)
+                    break;
+
+                // start to count water volume
+                int dist = i - stk.top() - 1;
+                int bounded_hgt = min(height[i], height[ stk.top() ]) - height[top_idx];
+
+                water += dist * bounded_hgt;
             }
+
+            stk.push(i);
         }
 
         return water;
