@@ -1,0 +1,26 @@
+Wild-card Matching,Watched,"1) 2D vector memo; 2) two different exit criteria; 3) check if pattern[i] == ‘*’, discuss"
+Regular Expression matching,Watched,"1) 2D vector memo; 2) two different exit criteria; 3) check if i + 1 < pattern.size() && pattern[i + 1] == ‘*’, discuss; 4) pattern leaves: “X*X*X*”, OK"
+Longest Increasing Subsequence,Watched,"M1: TC(O(N^1.5)) fake LIS, via lower_bound; M2: TC(O(N^2)) dp[i]: LIS ending with current idx i, loop to find it."
+Russian Doll Envelopes,Written,"Not understood about physical meanings of envelope.first and .second, and why we do that"
+Longest Palindrome Subsequence,,
+Word Search II,,
+Minimum Windows Substring,,
+Reverse Linked List,,
+Binary Tree Maximum path sum,,
+Top K frequent words,,
+Sliding window maximum,,
+Count of smaller number after self,,
+Longest substring with at most k distinct characters,Watched,"1) Move right, if size > thres, fix right, move left; 2) use hashmap to store char2cnt"
+Word pattern,,
+hash function,Watched,"1) Reminder addition formula, reverse form"
+next permutation,,
+course schedule,,
+sqrt(),,
+LCA I && II,,
+rainbow sort,Watched,"1) nums_start, nums_end, colors_start, colors_end; 2) very similar to quickSelect, either way to swap (I believe), from both ends or from front end"
+Merge K sorted lists,,
+K th smallest element in two sorted array,,
+ugly number,,
+K closest point,,
+Median of data stream,,
+meeting rooms II,,
