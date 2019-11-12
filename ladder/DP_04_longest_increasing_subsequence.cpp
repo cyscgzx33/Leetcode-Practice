@@ -28,7 +28,7 @@ public:
         if (nums.size() == 0)
         	return 0;
         int n = nums.size();
-    	std::vector<int> dp(n, 1);
+    	std::vector<int> dp(n, 1); // dp[i]: LIS value ending with current idx i
 
     	for (int i = 0; i < n; i++)
     	{
@@ -41,12 +41,9 @@ public:
 
     	int LIS = 0;
     	for (auto d : dp)
-    	{
     		LIS = d > LIS ? d : LIS;
-    	}
 
     	return LIS;
     }
 
 };
-
