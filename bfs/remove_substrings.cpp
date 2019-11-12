@@ -75,9 +75,7 @@ public:
                     }
 
                     // update found
-                    int found1 = next_s.find(word);
                     found = curr.find(word, found + 1);
-                    std::cout << "found1 = " << found1 << ", found = " << found;
                 }
             }
         }
