@@ -37,9 +37,7 @@ public:
             }
         }
 
-        // now m and s have been obtained
-        // one can access the result he wants
-        // for example, the minimum operation numbers
+        // print out the results of m and s 2D matrices
         std::cout << "m[i][j]: \n"; 
         for (int i = 0; i < n; i++)
         {
@@ -60,6 +58,9 @@ public:
             std::cout << std::endl;
         }
 
+        // now m and s have been obtained
+        // one can access the result he wants
+        // for example, the minimum operation numbers
         return m[0][n-1];
     }
 };
