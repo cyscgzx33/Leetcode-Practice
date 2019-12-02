@@ -44,6 +44,45 @@ public:
     }
 };
 
+/* rewarm of method 1 */
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @return: An integer
+     */
+    int stoneGame(vector<int> &A) {
+        if (A.size() == 0)
+            return 0;
+
+        int n = A.size();
+        
+        // construct pfsum: pfsum[0] = 0, pfsum[i+1] = pfsum[i] + A[i] (i >= 0)
+        std::vector<int> pfsum(n + 1, 0);
+        for (int i = 0; i < n; i++)
+            pfsum[i+1] = pfsum[i] + A[i];
+
+        // init dp: dp[i][j] means minimum efforts to move stones in [i, j]
+        // every diagnal elem should be 0
+        std::vector<std::vector<int>> dp( n, std::vector<int>(n, INT_MAX) );
+        for (int i = 0; i < n; i++)
+            dp[i][i] = 0;
+
+        // start iterating dp
+        // note: the starting length from [i, j] must be 2 (or 1, but NOT n)
+        for (int j = 0; j < n; j++)
+        {
+            for (int i = j; i >= 0; i--)
+            {
+                for (int k = i; k < j; k++)
+                    dp[i][j] = min( dp[i][j], dp[i][k] + dp[k+1][j] + ( pfsum[j+1] - pfsum[i] ) );
+            }
+        }
+
+        return dp[0][n-1];
+    }
+};
+
 /* Method 2: use memoization */
 class Solution {
 private:
