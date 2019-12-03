@@ -28,7 +28,9 @@ public:
      */
     bool isValidSerialization(string &preorder) {
         // write your code here
-        
+        int idx = 0;
+        bool valid = traverse(preorder, idx);
 
+        return valid && idx >= preorder.size();
     }
 };
