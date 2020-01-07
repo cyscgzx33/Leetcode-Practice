@@ -31,3 +31,34 @@ public:
     	return cnt;
     }
 };
+
+
+class Solution {
+public:
+    /**
+     * @param S: A list of integers
+     * @return: An integer
+     */
+    int triangleCount(vector<int> &S) {
+    	std::sort( S.begin(), S.end() );
+    	int n = S.size();
+    	int cnt = 0;
+
+    	for (int i = 2; i < n; i++)
+    	{
+    		int l = 0, r = i - 1;
+    		while (l < r)
+    		{
+    			if (S[l] + S[r] > S[i])
+    			{
+    				cnt += r - l;
+    				r--;
+    			}
+    			else
+    				l++;
+    		}
+    	}
+
+    	return cnt;
+    }
+};
