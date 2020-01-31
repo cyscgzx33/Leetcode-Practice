@@ -28,11 +28,30 @@ public:
         }
         std::sort(evts.begin(), evts.end(), comp);
 
+        std::vector<std::vector<int>> res;
         std::multiset<int> lines;
+        int cur_max = 0;
+
         for (auto& evt : evts)
         {
         	if (evt.flag == 1)
-        		lines.insert(evt.);
+        		lines.insert(evt.height);
+        	else
+        		lines.erase( lines.lower_bound(evt.height) ); // NOT evt.height, otherwise it would delete everything equals to evt.height
+        	if (lines.size() > 0)
+        	{
+        		if (*lines.rbegin() != cur_max)
+        		{
+        			cur_max = *lines.rbegin();
+        			res.push_back( {evt.time, cur_max} );
+        		}
+        	}
+        	else
+        	{
+        		cur_max = 0;
+        		res.push_back( {evt.time, cur_max} );
+        	}
         }
+        return res;
     }
 };
