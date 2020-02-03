@@ -2,16 +2,18 @@
 ---
 | # | Topic |
 |---| ----- |
-|1|[Search](Search/)|
-|2|[Binary Tree](binary_tree/)|
-|3|[Binary Search](binary_search/)|
-|4|[Two Pointers](two_pointers/)|
-|5|[Linked List](linked_list/)|
-|6|[Dynamic Programming](dp/)|
-|7|[Stack](stack/)|
-|8|[Hash](hash/)|
-|9|[Heap](heap/)|
-|10|[String](String/)|
+|1|[Search](Algorithm_in_topics/Search/)|
+|2|[Binary Tree](Algorithm_in_topics/binary_tree/)|
+|3|[Binary Search](Algorithm_in_topics/binary_search/)|
+|4|[Two Pointers](Algorithm_in_topics/two_pointers/)|
+|5|[Linked List](Algorithm_in_topics/linked_list/)|
+|6|[Dynamic Programming](Algorithm_in_topics/dp/)|
+|7|[Stack](Algorithm_in_topics/stack/)|
+|8|[Hash](Algorithm_in_topics/hash/)|
+|9|[Heap](Algorithm_in_topics/heap/)|
+|10|[String](Algorithm_in_topics/String/)|
+|11|[Union Find](Algorithm_in_topics/union_find/)|
+|12|[Sweep Line](Algorithm_in_topics/sweep_line/)|
 
 **Reference**
 ---
