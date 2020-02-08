@@ -1,7 +1,7 @@
 **Dynamic Programming**
 ---
 * Very challenging but fascinating algorithm type
-* Usually can be thought through such a flow: **Brutal Force** -> **Memoized Search** -> (strictly) **Dynamic Programming**
+* Usually can be resolved through such a flow: **Brutal Force** -> **Memoized Search** -> (strictly) **Dynamic Programming**
 
 **Basic Sub-topics**
 ---
