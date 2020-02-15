@@ -26,7 +26,7 @@ public:
          * 2. dp[i][j] = min {0<=x<j, 0<i<=x} ( dp[i-1][x] + min_dist(x, j-1) ):
          *    Idea: split a problem into sub-problems, where min_dist[x][y] gives out the 
          *          minimum step result if only one post-office is built within [x, j]
-         * 3. dp[0][j] = INT_MAX, dp[i][0] = 0, dp[i][j] = 0 if i >= j
+         * 3. dp[0][j] = INT_MAX, dp[i][0] = 0, dp[i][j] = 0 if i >= j, dp[0][0] = 0
          */
 
         // Note: 0x3f3f3f3f is a better choice of 0x1fffffff(INT_MAX)
