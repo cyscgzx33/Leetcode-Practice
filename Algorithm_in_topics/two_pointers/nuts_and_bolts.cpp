@@ -31,7 +31,7 @@ private:
 		cnt_smaller += start; // Note: important to take care of!!!
 		swap(nuts[cnt_smaller], nuts[pivot]);
 		pivot = cnt_smaller;
-        
+
 		cout << "start = " << start
 			 << ", end = " << end
 			 << ", pivot = " << pivot << endl;
