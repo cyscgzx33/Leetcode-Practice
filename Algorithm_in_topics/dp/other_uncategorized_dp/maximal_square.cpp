@@ -16,7 +16,7 @@ public:
         int m = matrix.size(), n = matrix[0].size();
         // dp[i][j] indicates the maximal sqaure length ending at (i, j)
         vector<vector<int>> dp(m, vector<int>(n, 0));
-        int res = 0;
+        int len = 0;
         for (int i = 0; i < m; i++)
         {
             for (int j = 0; j < n; j++)
@@ -24,11 +24,16 @@ public:
                 if (i == 0 || j == 0)
                     dp[i][j] = matrix[i][j];
                 else
-                    dp[i][j] = matrix[i][j] == 1 ? matrix[i][j] + dp[i-1][j-1] : 0;
-                res = max(dp[i][j], res);
+                {
+                    if (matrix[i][j] == 0)
+                        continue;
+                    // draw a picture and it looks pretty obvious
+                    dp[i][j] = min(min(dp[i-1][j-1], dp[i][j-1]), dp[i-1][j]) + 1;
+                }
+                len = max(dp[i][j], len);
             }
         }
 
-        return res;
+        return len * len;
     }
 };
