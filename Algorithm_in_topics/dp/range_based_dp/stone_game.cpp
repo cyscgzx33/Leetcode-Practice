@@ -1,3 +1,8 @@
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
 /* Method 1: create a dp table directly */
 
 class Solution {
@@ -28,7 +33,7 @@ public:
         std::vector<int> pfsum(sz + 1, 0);
         for (int i = 1; i <= sz; i++)
         	pfsum[i] = pfsum[i-1] + A[i-1];
-        
+
         // format the upper part of the dp matrix (since i <= j must be maintained, we don't care about lower part)
         // the initial state transition formula is: dp[i][j] = min_{ for any k in [i, j) } ( dp[i][k], dp[k+1][j] ) + sum[i][j]
         for (int i = sz - 1; i >= 0; i--)
@@ -139,5 +144,50 @@ public:
         	pfsum[i] = pfsum[i-1] + A[i-1];
 
         return memoizedSearch(0, sz-1, A, dp, pfsum);
+    }
+};
+
+
+/* rewarm of method 1 */
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @return: An integer
+     */
+    int stoneGame(vector<int> &A) {
+        int n = A.size();
+        if (n == 0)
+            return 0;
+        
+        vector<vector<int>> dp(n, vector<int>(n, 0x3f3f3f3f));
+
+        // construct pfsum vector
+        vector<int> pfsum(n+1, 0);
+        for (int i = 0; i <= n; i++)
+            pfsum[i+1] = pfsum[i] + A[i];
+
+        // init: dp[i][i] = 0: by definition (no need to move, since only one cluster left) 
+        // dp[i][i+1] = sum[i, i+1]: by definition (most basic step, move two clusters to one)
+        for (int i = 0; i < n; i++)
+            dp[i][i] = 0;
+        for (int i = 0; i < n-1; i++)
+            dp[i][i+1] = pfsum[i+2] - pfsum[i];
+        
+        // state transition function: dp[i][j] = sum[i, j] + min {i<=k<j} (dp[i][k] + dp[k+1][j])
+        // main loop: first priority is l, following by i and j, then k
+        for (int l = 2; l <= n; l++)
+        {
+            for (int i = 0; i < n; i++)
+            {
+                int j = i + l - 1;
+                if (j >= n)
+                    continue;
+                for (int k = i; k < j; k++)
+                    dp[i][j] = min(dp[i][j], pfsum[j+1] - pfsum[i] + dp[i][k] + dp[k+1][j]);
+            }
+        }
+
+        return dp[0][n-1];
     }
 };
