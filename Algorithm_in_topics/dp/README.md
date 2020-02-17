@@ -4,12 +4,12 @@
 * Usually can be resolved through such a flow: **Brutal Force** -> **Memoized Search** -> (strictly) **Dynamic Programming**
 * There is a ***standard template*** for a DP problem, i.e., if the following 4 questions are answered, one can almost achieve the dp algorithm coding:
     * What is the **definition** of the vector/array `dp`?
-    * What are the **boundary conditions / initial conditions** of `dp`?
+    * What are the **boundary / initial conditions** of `dp`?
     * (*Usually the most important question*) What is the **state transition** function of dp, i.e., how to **divide a problem into sub-problem(s)**? 
     * What is the **order** should the vector/array `dp` be iterating in the main loop(s)?
-* As an example of conducting the ***standard template*** above, let's take the `Stone Game` problem ([Lintcode link](https://www.lintcode.com/problem/stone-game/description), [Solution](range_based_dp/stone_game.cpp)) to go through the 4 questions:
+* As an example of conducting the ***standard template*** above, let's take the `Stone Game` problem ([Lintcode link](https://www.lintcode.com/problem/stone-game/description), [Solution link](range_based_dp/stone_game.cpp)) to go through the 4 questions:
     * **definition** of `dp[i][j]`: the cost of moving all the stones in the range [i, j], with boundary positions i & j included
-    * **boundary conditions / initial conditions**: dp[i][i] = 0 (as no cost is needed to move a single stone), dp[i][j] = sum[i, j]
+    * **boundary / initial conditions**: dp[i][i] = 0 (as no cost is needed to move a single stone), dp[i][j] = sum[i, j]
     * **state transition matrix**: ``` dp[i][j] = sum[i, j] + min{i<= k < j}(dp[i][k] + dp[k+1][j]) ```, important here, `k` is the *partition position* here so that the problem of `dp[i][j]` is divided into two sub-problems `dp[i][k]` & `dp[k+1][j]`, and the optimal `dp[i][j]` take the minimum choice among all the feasible partition positions of `k`
     * **order of iteration**: firstly with an outer loop `l` as the length (length := j - i + 1), following by starting position `i`, finally with partition position `k`
 
