@@ -32,3 +32,35 @@ public:
         return res;
     }
 };
+
+
+class Solution {
+public:
+    /**
+     * @param A: An integer array
+     * @param start: An integer
+     * @param end: An integer
+     * @return: the number of possible answer
+     */
+    int subarraySumII(vector<int> &A, int start, int end) {
+        int n = A.size();
+        vector<int> pfsum(n+1, 0);
+        for (int i = 0; i < n; i++)
+            pfsum[i+1] = pfsum[i] + A[i];
+
+        int l = -1, r = -1, res = 0;
+
+        // i is the end pos
+        // l is first valid start pos
+        // r is the one after the last valid start pos
+        for (int i = 0; i < n; i++)
+        {
+            while (l < i && pfsum[i+1] - pfsum[l+1] > end)
+                l++;
+            while (r < i && pfsum[i+1] - pfsum[r+1] >= start)
+                r++;
+            res += r - l;
+        }
+        return res;
+    }
+};
