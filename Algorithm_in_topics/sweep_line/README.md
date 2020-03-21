@@ -18,5 +18,5 @@
 ---
 | # | Sub-topic | Classic Examples |
 |---| --------- | ---------------- |
-|1|Simple Sweep Line| [Airplane in the sky](airplane_in_the_sky.cpp), [Meeting rooms II](meeting_rooms_II.cpp) |
+|1|Simple Sweep Line| [Airplane in the sky](airplane_in_the_sky.cpp), [Meeting rooms II](meeting_rooms_II.cpp), [Merge intervals](merge_intervals.cpp)
 |2|Multiple Sweep Line| [Skyline problem](skyline_problem.cpp)
