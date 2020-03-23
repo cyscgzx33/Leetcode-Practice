@@ -3,13 +3,13 @@
 ## Pattern Matching
 ### Z-algorithm: a linear time algorithm
 <p align="center">
-  <img src="./pattern_match/pictures/Slide2.PNG" width="600" />
+  <img src="./pattern_match/pictures/Slide2.PNG" width="700" />
 </p>
 <p align="center">
-  <img src="./pattern_match/pictures/Slide3.PNG" width="600" />
+  <img src="./pattern_match/pictures/Slide3.PNG" width="700" />
 </p>
 <p align="center">
-  <img src="./pattern_match/pictures/Slide4.PNG" width="600" />
+  <img src="./pattern_match/pictures/Slide4.PNG" width="700" />
 </p>
 
 #### Reference

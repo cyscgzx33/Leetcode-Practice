@@ -1,8 +1,9 @@
 **Heap**
 ---
-* Very common in topics related to **Kth** or **K elements**, such as *Kth largest*, *Kth smallest*, *top K ...*, *sliding window*, and etc.
+* Very common in topics related to **Kth** or **K elements**, such as *Kth largest*, *Kth smallest*, *top K*, *sliding window*, and etc.
 * Some template about how to customize C++ STL `std::priority_queue` with customized type `Node` and its corresponding comparator `Compare`:
     ```c++
+    // customized type
     class Node
     {
     public:
@@ -12,6 +13,7 @@
         Node(int v, int r, int c) : val(v), row(r), col(c) {}
     };
 
+    // comparator corresponding to the customized type
     class Compare
     {
     public:
@@ -25,7 +27,7 @@
     {
         // ...
 
-        // how to customize a heap (priority_queue) with customized type and its corresponding comparator
+        // define a heap (priority_queue) with customized type and its corresponding comparator
         std::priority_queue<Node, std::vector<Node>, Compare> pq;
 
         // ...
