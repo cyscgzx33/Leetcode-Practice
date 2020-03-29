@@ -58,7 +58,7 @@ public:
                 // Case II-b: Z[K'] < len_beta
                 else if (Z[K_prime] < len_beta)
                     Z[K] = Z[K_prime];
-                // Case II-a: Z[K'] = len_beta
+                // Case II-c: Z[K'] == len_beta
                 else
                 {
                     vector<int> updated_pos = naiveCompare(s, len_gamma, R + 1);
