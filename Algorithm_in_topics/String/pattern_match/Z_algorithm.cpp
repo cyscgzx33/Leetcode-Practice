@@ -53,6 +53,7 @@ vector<int> patternMatch(string& s, string& p)
             int len_beta = R - K + 1;
             // calculate position of K'
             int K_prime = len_alpha - len_beta;
+            int len_gamma = Z[K_prime];
 
             // Case II-a: Z[K'] > len_beta
             if (Z[K_prime] > len_beta)
@@ -63,10 +64,14 @@ vector<int> patternMatch(string& s, string& p)
             // Case II-a: Z[K'] = len_beta
             else
             {
-                vector<int> updated_pos = naiveCompare(S, len_alpha, R + 1);
-                int steps = updated_pos[0];
+                vector<int> updated_pos = naiveCompare(s, len_gamma, R + 1);
+                int steps = updated_pos[0] - len_gamma;
                 Z[K] = len_beta + steps;
-                R += steps;
+                if (steps != 0)
+                {
+                    L = K;
+                    R = R + steps;
+                }
             }
         }
         K++;
