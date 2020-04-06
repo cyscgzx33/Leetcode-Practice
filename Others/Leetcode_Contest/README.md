@@ -1,7 +1,8 @@
 # Detailed Explanation
 
 ## Longest Happy String
-Check the [source code](longest_happy_string.cpp). 
+Check the [source code](longest_happy_string.cpp), and thanks for [votrubac's delicate answer](https://leetcode.com/problems/longest-happy-string/discuss/564277/C%2B%2BJava-a-greater-b-greater-c).
+ 
 My explanation about the intuition of this approach.
 
 First of all, it's just like playing a poker game with a greedy strategy. Suppose you're a single player of this game, the goal is to escape as many cards in your hand as possible, with a restriction rule that you can't escape 3 same cards in a row. Now let's start playing the poker game, every round, you have to organize those cards in your hand (three types: `'a'`, `'b'`, `'c'`), with an order of `a >= b >= c`.
