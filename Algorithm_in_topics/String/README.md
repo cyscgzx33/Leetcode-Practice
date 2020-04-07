@@ -9,7 +9,7 @@
   <img src="./pattern_match/pictures/Slide3.PNG" width="700" />
 </p>
 <p align="center">
-  <img src="./pattern_match/pictures/Slide4.PNG" width="700" />
+  <img src="./pattern_match/pictures/Slide4_md.png" width="700" />
 </p>
 
 #### Reference
