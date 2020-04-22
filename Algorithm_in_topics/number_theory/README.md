@@ -42,6 +42,8 @@
     }
     ```
 
+> $$c^2 = b^2 + a^2$$ (1)
+<br/>
 **Basic Sub-topics**
 ---
 | # | Sub-topic | Classic Examples |
