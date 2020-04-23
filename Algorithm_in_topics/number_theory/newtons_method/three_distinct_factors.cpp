@@ -27,6 +27,22 @@ public:
         return pow(x, 2) == n ? x : -1;
     }
     
+    // another method using double type as intermediate value
+    long long getSqrtByDouble(long long n)
+    {
+        double x = pow(10, 9) < n ? pow(10, 9) : n; // as n coule be as large as pow(10, 18)
+        double x_last = 0;
+        double thres = 1; // according to Wikipedia, thres = 1 is the LARGEST choice for stopping criteria
+
+        while (abs(x - x_last) >= thres)
+        {
+            x_last = x;
+            x = (x_last + n / x_last) / 2;
+        }
+        long long x_floor = floor(x); // why do we choose floor() here? check the Readme.md outside
+        return pow(x_floor, 2) == n ? x_floor : -1;
+    }
+
     bool isPrime(long long n)
     {
         if (n == -1)
