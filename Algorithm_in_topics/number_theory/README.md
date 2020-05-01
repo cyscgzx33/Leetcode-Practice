@@ -68,9 +68,6 @@ By further simplifying, we can obtain (6) as an equivalent expression as (5):
 $$(\frac{x_{n}}{2} - \frac{\alpha}{2 x_{n}})^2<0$$ (6)
 Clearly, (6) doesn't hold for $\frac{x_{n}}{2} - \frac{\alpha}{2 x_{n}} \in \mathbb{R}$, which is a contradiction. Therefore, inequality (0) has been proved.
 
-```math x = y + 1``` (7)
-
-
 ## Basic Sub-topics
 ---
 | # | Sub-topic | Classic Examples |
