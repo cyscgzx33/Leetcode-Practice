@@ -14,6 +14,7 @@
 |10|[String](Algorithm_in_topics/String/)|
 |11|[Union Find](Algorithm_in_topics/union_find/)|
 |12|[Sweep Line](Algorithm_in_topics/sweep_line/)|
+|13|[Trie](Algorithm_in_topics/Trie)|
 
 **Reference**
 ---
