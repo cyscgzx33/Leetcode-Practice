@@ -6,7 +6,7 @@
     ```C++
     class ResultType
     {
-    public:
+      public:
         int level;          // current level
         TreeNode* LCA;      // lowest common ancester
         ResultType(int l, TreeNode* root) : level(l), LCA(root) {}
