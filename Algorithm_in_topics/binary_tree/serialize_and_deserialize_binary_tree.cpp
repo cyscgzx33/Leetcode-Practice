@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <stack>
 using namespace std;
 
 struct TreeNode {
@@ -13,13 +14,13 @@ struct TreeNode {
 
 class Codec {
 public:
-    std::vector<std::string> split(const std::string& s, char delimiter)
+    vector<string> split(const string& s, char delimiter)
     {
-        std::vector<std::string> tokens;
-        std::string token;
-        std::istringstream tokenStream(s);
+        vector<string> tokens;
+        string token;
+        istringstream tokenStream(s);
 
-        while (std::getline(tokenStream, token, delimiter))
+        while (getline(tokenStream, token, delimiter))
         {
             tokens.push_back(token);
         }
@@ -108,3 +109,101 @@ public:
 // Your Codec object will be instantiated and called as such:
 // Codec codec;
 // codec.deserialize(codec.serialize(root));
+
+
+
+/* Method 2: using dfs to deserialize the data */
+// Decodes your encoded data to tree.
+
+class Codec {
+public:
+    vector<string> split(const string& s, char delimiter)
+    {
+        vector<string> tokens;
+        string token;
+        istringstream tokenStream(s);
+
+        while (getline(tokenStream, token, delimiter))
+        {
+            tokens.push_back(token);
+        }
+
+        return tokens;
+    }
+    void traverseRecur(TreeNode* root, vector<int>& traverse_vec)
+    {
+        if (root == nullptr)
+        {
+            traverse_vec.push_back(INT_MAX);
+            return;
+        }
+        traverse_vec.push_back(root->val);
+        traverseRecur(root->left, traverse_vec);
+        traverseRecur(root->right, traverse_vec);
+    }
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (root == nullptr)
+            return "";
+
+        // Implementation 1: recursion
+        vector<int> traverse_vec;
+        traverseRecur(root, traverse_vec);
+        string res = "";
+        for (auto t_vec : traverse_vec)
+        {
+            if (t_vec != INT_MAX)
+                res += to_string(t_vec) + ",";
+            else
+                res += "#,";
+        }
+        res.erase(res.end() - 1);
+        return res;
+
+        // dfs: front-order-traversal
+        // (TODO) Implementation 2: manual stack
+        // string res = "";
+        // stack<TreeNode*> s;
+        // s.push(root);
+        // res += to_string(root->val);
+        // res += ",";
+
+        // TreeNode* curr = root;
+        // while (s.size() > 0)
+        // {
+            
+        // }
+    }
+
+    TreeNode* dfs(vector<string>& data, int& i)
+    {
+        TreeNode* root = nullptr;
+        if (i >= data.size())
+            return nullptr;
+        if (data[i] != "#")
+            root = new TreeNode(stoi(data[i++]));
+        else
+        {
+            i++; // don't forget this, otherwise it stuck somewhere
+            return root;
+        }
+        TreeNode* left = dfs(data, i);
+        TreeNode* right = dfs(data, i);
+        root->left = left;
+        root->right = right;
+
+        return root;
+    }
+
+    TreeNode* deserialize(string data) {
+        if (data == "")
+            return nullptr;
+        vector<string> input_vec = split(data, ',');
+        TreeNode* root;
+
+        int itor = 0;
+        root = dfs(input_vec, itor);
+
+        return root;
+    }
+};
