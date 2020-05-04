@@ -141,6 +141,30 @@ public:
         traverseRecur(root->left, traverse_vec);
         traverseRecur(root->right, traverse_vec);
     }
+
+    void traverseNonrecur(TreeNode* root, vector<string>& traverse_vec)
+    {
+        stack<TreeNode*> s;
+        s.push(root);
+
+        TreeNode* curr = root;
+        while (s.size() > 0)
+        {
+            TreeNode* curr = s.top();
+            while (curr->left != nullptr)
+            {
+                traverse_vec.push_back(to_string(curr->val));
+                s.push(curr);
+                curr = curr->left;
+            }
+            // now curr->left == nullptr
+            traverse_vec.push_back("#");
+
+            // then switch to the right branch
+            if (curr->right)
+        }
+    }
+
     // Encodes a tree to a single string.
     string serialize(TreeNode* root) {
         if (root == nullptr)
@@ -161,18 +185,10 @@ public:
         return res;
 
         // dfs: front-order-traversal
-        // (TODO) Implementation 2: manual stack
-        // string res = "";
-        // stack<TreeNode*> s;
-        // s.push(root);
-        // res += to_string(root->val);
-        // res += ",";
+        // (TODO) Implementation 2: non-recurrsive method using manual stack
+        vector<string> traverse_vec_str;
+        traverseNonrecur(root, traverse_vec_str);
 
-        // TreeNode* curr = root;
-        // while (s.size() > 0)
-        // {
-            
-        // }
     }
 
     TreeNode* dfs(vector<string>& data, int& i)
