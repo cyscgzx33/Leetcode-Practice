@@ -52,7 +52,7 @@ Output: 42
 
 **Sample code:**
 
-{% code title="" %}
+{% code title="binary\_tree\_maximum\_path\_sum.cpp" %}
 ```cpp
 class Solution {
 public:
