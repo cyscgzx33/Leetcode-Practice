@@ -74,7 +74,7 @@ $$
 
 #### Sample code:
 
-{% code title="maximum\_subarray\_sum\_II.cpp" %}
+{% code title="maximum\_average\_subarray\_II.cpp" %}
 ```cpp
 class Solution {
 public:
