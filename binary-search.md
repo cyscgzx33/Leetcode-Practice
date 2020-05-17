@@ -169,6 +169,10 @@ The minimum value in an array is 1.
 * Always compare to the front value `a[0]` and end value `a[n-1]`
 * A corner case: there's NO rotation in the given array, then just simply return `a[0]`
 
+#### 
+
+![Picture for LintCode 159](.gitbook/assets/lincode_159_pic.jpg)
+
 #### Sample code:
 
 {% code title="find\_minimum\_in\_rotated\_sorted\_array.cpp" %}
