@@ -27,6 +27,8 @@ Output: [2, 2, 3, 5, 11]
   * `if (res.size() == 0 || res.back() <= target)` or, more straightforward,
   * `if (target > 1)`
 
+#### Sample code:
+
 {% code title="prime\_factorization.cpp" %}
 ```cpp
 class Solution {
