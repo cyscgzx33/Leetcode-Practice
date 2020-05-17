@@ -132,5 +132,80 @@ public:
 ```
 {% endcode %}
 
+## Type 2: Rotated Arrays
 
+### LintCode 159: Find Minimum in Rotated Sorted Array
+
+Suppose a sorted array in ascending order is rotated at some pivot unknown to you beforehand.
+
+\(i.e., `0 1 2 4 5 6 7` might become `4 5 6 7 0 1 2`\).
+
+Find the minimum element.
+
+{% hint style="info" %}
+ You can assume no duplicate exists in the array.
+{% endhint %}
+
+**Example 1:**
+
+```text
+Input：[4, 5, 6, 7, 0, 1, 2]
+Output：0
+Explanation：
+The minimum value in an array is 0.
+```
+
+**Example 2:**
+
+```text
+Input：[2,1]
+Output：1
+Explanation：
+The minimum value in an array is 1.
+```
+
+#### Logic:
+
+* Always compare to the front value `a[0]` and end value `a[n-1]`
+* A corner case: there's NO rotation in the given array, then just simply return `a[0]`
+
+#### Sample code:
+
+{% code title="find\_minimum\_in\_rotated\_sorted\_array.cpp" %}
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    int findMin(vector<int> &nums) {
+        int n = nums.size();
+        if (n == 1)
+            return nums[0];
+        int start = 0, end = n - 1;
+        
+        // corner case: if there's no rotation, return nums[0]
+        if (nums[0] < nums[n-1])
+            return nums[0];
+
+        while (start + 1 < end)
+        {
+            int mid = (start + end) / 2;
+            
+            if (nums[mid] >= nums[0])
+                start = mid;
+            else if (nums[mid] <= nums[n-1])
+                end = mid;
+            // otherwise, nums[mid] < nums[0] && nums[mid] > nums[n-1], impossible
+        }
+
+        if (nums[start] < nums[end])
+            return nums[start];
+        else
+            return nums[end];
+    }
+};
+```
+{% endcode %}
 
