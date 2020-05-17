@@ -4,17 +4,23 @@
 
 ### LintCode 235. Prime Factorization
 
-Becoming a super hero is a fairly straight forward process:
+Prime factorize a given integer.
 
+**Example 1:**
+
+```text
+Input: 10
+Output: [2, 5]
 ```
-$ give me super-powers
+
+**Example 2:**
+
+```text
+Input: 660
+Output: [2, 2, 3, 5, 11]
 ```
 
-{% hint style="info" %}
- Super-powers are granted randomly so please submit an issue if you're not happy with yours.
-{% endhint %}
-
-Once you're strong enough, save the world:
+#### Logic:
 
 {% code title="hello.sh" %}
 ```bash
