@@ -1,6 +1,8 @@
-# Initial page
+# Math Related Topics
 
-## Getting Super Powers
+## Type 1: Factors / GCD
+
+### LintCode 235. Prime Factorization
 
 Becoming a super hero is a fairly straight forward process:
 
