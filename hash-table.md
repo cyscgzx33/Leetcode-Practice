@@ -31,7 +31,7 @@ Output: False
 * 先扫一遍字符串s1，统计各个字母的个数，取s2前s1长度个字符，匹配个数是否相符
 * 若不相符，**去除最前面的字符，加入后一个字符**，重新比对，直至个数匹配，或扫描完s2。
 
-![Picture: LeetCode 567 Permutation in String](.gitbook/assets/permutation_in_string.jpg)
+![](.gitbook/assets/permutation_in_string%20%281%29.jpg)
 
 #### Sample code:
 
