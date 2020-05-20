@@ -310,7 +310,7 @@ Explanation: Only subset [1],[2],[1,3],[1,2],[1,2,3] satisfy the condition, so t
 
 ![Picture: LintCode 818](.gitbook/assets/lincode_818_pic.jpg)
 
-
+#### Sample code:
 
 {% code title="subset\_with\_target.cpp" %}
 ```cpp
