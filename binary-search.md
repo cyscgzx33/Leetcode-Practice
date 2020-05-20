@@ -215,3 +215,135 @@ public:
 
 ### LintCode 160: Find Minimum in Rotated Sorted Array II
 
+#### Note: 
+
+* The reason to put this item here is that, IT **CANNOT** BE ACHIEVED BY BINARY SEARCH
+  * It can be proved \(according to jiuzhang course\) that the worse case TC is O\(N\), such as, "111110111", only one 0 among all 1s
+  * On the cases where `a[0] > a[n-1]`, one can apply binary search
+
+#### Sample code:
+
+{% code title="find\_minimum\_in\_rotated\_sorted\_array\_II.cpp" %}
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: a rotated sorted array
+     * @return: the minimum number in the array
+     */
+    int findMin(vector<int> &nums) {
+        int n = nums.size();
+        if (n == 1)
+            return nums[0];
+        int start = 0, end = n - 1;
+        
+        // corner case: if there's no rotation, return nums[0]
+        if (nums[0] < nums[n-1])
+            return nums[0];
+        
+        // only in this case, we can use binary search ( TC: O(logN) )
+        if (nums[0] > nums[n-1])
+        {
+            while (start + 1 < end)
+            {
+                int mid = (start + end) / 2;
+                
+                if (nums[mid] >= nums[0])
+                    start = mid;
+                else if (nums[mid] <= nums[n-1])
+                    end = mid;
+                // otherwise, nums[mid] < nums[0] && nums[mid] > nums[n-1], impossible
+            }
+    
+            if (nums[start] < nums[end])
+                return nums[start];
+            else
+                return nums[end];
+        }
+        else // just simply search everyone ( TC: O(N) )
+        {
+            int min_val = nums[0];
+            for (int i = 0; i < n; i++)
+                min_val = min(min_val, nums[i]);
+                
+            return min_val;
+        }
+        
+    }
+};
+```
+{% endcode %}
+
+## Type 3: Binary Search for Ranges in Arrays
+
+### LintCode 818. Subset with Target
+
+Give an array and a target. We need to find the number of subsets which meet the following conditions:  
+The sum of the minimum value and the maximum value in the subset is less than the target.
+
+* The length of the given array does not exceed `50`.
+* `target <= 100000`.
+
+**Example 1**
+
+```text
+Input:
+array = [1,5,2,4,3]
+target = 4
+Output: 2
+Explanation: Only subset [1],[1,2] satisfy the condition, so the answer is 2.
+```
+
+**Example 2**
+
+```text
+Input:
+array = [1,5,2,4,3]
+target = 5
+Output: 5
+Explanation: Only subset [1],[2],[1,3],[1,2],[1,2,3] satisfy the condition, so the answer is 5.
+```
+
+#### Logic:
+
+* Sort, and find the relation by trying some experiments
+
+![Picture: LintCode 818](.gitbook/assets/lincode_818_pic.jpg)
+
+
+
+{% code title="subset\_with\_target.cpp" %}
+```cpp
+class Solution {
+public:
+    /**
+     * @param nums: the array
+     * @param target: the target
+     * @return: the number of subsets which meet the following conditions
+     */
+    long long subsetWithTarget(vector<int> &nums, int target) {
+        sort(nums.begin(), nums.end());
+        
+        int n = nums.size();
+        long long res = 0;
+        for (int i = 0; i < n; i++)
+        {
+            int min_val_option = nums[i];
+            int max_val_option = target - min_val_option;
+            auto lb = lower_bound(nums.begin(), nums.end(), max_val_option);
+            // lb is the first/smallest one >= max_val_option, thus -1 is needed
+            int max_pos_option = lb - nums.begin() - 1; 
+            if (max_pos_option >= i)
+                res += pow(2, max_pos_option - i);
+            else
+                break;
+        }
+        
+        return res;
+    }
+};
+```
+{% endcode %}
+
+
+
