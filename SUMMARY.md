@@ -7,4 +7,5 @@
 * [Stack](stack.md)
 * [Math Related Topics](math-related-topics.md)
 * [Dynamic Programming](dynamic-programming.md)
+* [Union Find](union-find.md)
 
