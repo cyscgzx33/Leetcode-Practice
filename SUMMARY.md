@@ -6,4 +6,5 @@
 * [Hash Table](hash-table.md)
 * [Stack](stack.md)
 * [Math Related Topics](math-related-topics.md)
+* [Dynamic Programming](dynamic-programming.md)
 
