@@ -82,6 +82,8 @@ public:
 * [1130. Minimum Cost Tree From Leaf Values](https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/)
 * [907. Sum of Subarray Minimums](https://leetcode.com/problems/sum-of-subarray-minimums/)
 * [503. Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/)
+* [1008. Construct Binary Search Tree From Preorder Traversal ](https://leetcode.com/problems/construct-binary-search-tree-from-preorder-traversal/)
+  * [A solution in this gitbook](https://app.gitbook.com/@chenyus/s/leetcodedigest/~/drafts/-M88hAgbE5Dri_z7Nwwj/binary-tree#leetcode-1008-construct-binary-search-tree-from-preorder-traversal)
 
 
 

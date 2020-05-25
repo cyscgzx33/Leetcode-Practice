@@ -83,5 +83,143 @@ public:
 ```
 {% endcode %}
 
+## Type 2: Preorder Traversal
 
+### LeetCode 1008. Construct Binary Search Tree From Preorder Traversal
+
+Return the root node of a binary **search** tree that matches the given `preorder` traversal.
+
+_\(Recall that a binary search tree is a binary tree where for every node, any descendant of `node.left` has a value `<` `node.val`, and any descendant of `node.right` has a value `>` `node.val`.  Also recall that a preorder traversal displays the value of the `node` first, then traverses `node.left`, then traverses `node.right`.\)_
+
+It's guaranteed that for the given test cases there is always possible to find a binary search tree with the given requirements.
+
+**Example 1:**
+
+```text
+Input: [8,5,1,7,10,12]
+Output: [8,5,10,1,7,null,12]
+
+```
+
+**Constraints:**
+
+* `1 <= preorder.length <= 100`
+* `1 <= preorder[i] <= 10^8`
+* The values of `preorder` are distinct.
+
+Logic:
+
+* **Monotonic Decreasing Stack** + **Lowerbound** ideation
+* In BST, the lowerbound \(the largest node with smaller value than `preorder[i]`\) of a right subtree is its father 
+
+![](.gitbook/assets/leetcode_1008_pic.jpg)
+
+{% code title="construct\_binary\_search\_tree\_from\_preorder\_traversal.cpp" %}
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+ 
+/*  Written Style 1.0: clear demonstration but wordy */
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        stack<TreeNode*> mono_decr;
+        TreeNode* root = new TreeNode(preorder[0]);
+        mono_decr.push(root);
+        
+        for (int i = 1; i < preorder.size(); i++)
+        {
+            if (preorder[i] < mono_decr.top()->val)
+            {
+                TreeNode* node = new TreeNode(preorder[i]);
+                mono_decr.top()->left = node;
+                mono_decr.push(node);
+            }
+            else
+            {
+                TreeNode* lb;
+                while (mono_decr.size() > 0 && mono_decr.top()->val <= preorder[i])
+                {
+                    lb = mono_decr.top();
+                    mono_decr.pop();
+                }
+                TreeNode* node = new TreeNode(preorder[i]);
+                lb->right = node;
+                mono_decr.push(node);
+            }
+        }
+        
+        return root;
+    }
+};
+
+/* Written Style 1.1: shorter version of Style 1.0 */
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        stack<TreeNode*> mono_decr;
+        TreeNode* root = new TreeNode(preorder[0]);
+        mono_decr.push(root);
+        
+        for (int i = 1; i < preorder.size(); i++)
+        {
+            TreeNode* node = new TreeNode(preorder[i]);
+            if (preorder[i] < mono_decr.top()->val)
+                mono_decr.top()->left = node;
+            else
+            {
+                TreeNode* lb; // the node with largest smaller value than preorder[i]
+                while (mono_decr.size() > 0 && mono_decr.top()->val <= preorder[i])
+                {
+                    lb = mono_decr.top();
+                    mono_decr.pop();
+                }
+                lb->right = node;
+            }
+            mono_decr.push(node);
+        }
+
+        return root;
+    }
+};
+
+/* Written Style 2.0: even shorter */
+class Solution {
+public:
+    TreeNode* bstFromPreorder(vector<int>& preorder) {
+        stack<TreeNode*> monotonic_decr;
+        TreeNode* root = new TreeNode(preorder[0]);
+        monotonic_decr.push(root);
+        
+        for (int i = 1; i < preorder.size(); i++)
+        {
+            int item = preorder[i];
+            TreeNode* curr = monotonic_decr.top();
+            while (monotonic_decr.size() > 0 && monotonic_decr.top()->val < item)
+            {
+                curr = monotonic_decr.top();
+                monotonic_decr.pop();
+            }
+            TreeNode* add_on = new TreeNode(item);
+            if (curr->val > item)
+                curr->left = add_on;
+            else
+                curr->right = add_on;
+            monotonic_decr.push(add_on);
+        }
+        
+        return root;
+    }
+};
+```
+{% endcode %}
 
