@@ -1,25 +1,18 @@
-# Initial page
+# Context
 
-## Getting Super Powers
+#### Chap 1. Binary Tree
 
-Becoming a super hero is a fairly straight forward process:
+#### Chap 2. Binary Search
 
-```
-$ give me super-powers
-```
+#### Chap 3. Hash Table
 
-{% hint style="info" %}
- Super-powers are granted randomly so please submit an issue if you're not happy with yours.
-{% endhint %}
+#### Chap 4. Stack
 
-Once you're strong enough, save the world:
+#### Chap 5. Dynamic Programming
 
-{% code title="hello.sh" %}
-```bash
-# Ain't no code for that yet, sorry
-echo 'You got to trust me on this, I saved the world'
-```
-{% endcode %}
+#### Chap 6. Math Related Topics
+
+#### Chap 7. Union Find
 
 
 
