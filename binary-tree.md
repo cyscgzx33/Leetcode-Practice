@@ -228,3 +228,86 @@ public:
 * [LeetCode 1028. Recover a Tree from Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)
 * [LintCode 1307. Verify Preorder Sequence in Binary Search Tree](https://www.lintcode.com/problem/verify-preorder-sequence-in-binary-search-tree/description)
 
+## Type 3: General
+
+### LeetCode 226. Invert Binary Tree
+
+Invert a binary tree.
+
+**Example:**
+
+Input:
+
+```text
+     4
+   /   \
+  2     7
+ / \   / \
+1   3 6   9
+```
+
+Output:
+
+```text
+     4
+   /   \
+  7     2
+ / \   / \
+9   6 3   1
+```
+
+**Trivia:**  
+This problem was inspired by [this original tweet](https://twitter.com/mxcl/status/608682016205344768) by [Max Howell](https://twitter.com/mxcl):
+
+> Google: 90% of our engineers use the software you wrote \(Homebrew\), but you can’t invert a binary tree on a whiteboard so f\*\*\* off.
+
+#### Sample Code:
+
+{% code title="invert\_binary\_tree.cpp" %}
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    // Method 1: recursive (DFS)
+    TreeNode* invertTree(TreeNode* root) {
+        if (root == nullptr)
+            return root;
+        swap(root->left, root->right);
+        invertTree(root->left);
+        invertTree(root->right);
+
+        return root;
+    }
+    // Method 2: non-recursive
+    TreeNode* invertTree(TreeNode* root) {
+        stack<TreeNode*> s;
+        s.push(root);
+
+        while (s.size() > 0)
+        {
+            auto p = s.top();
+            s.pop();
+            if (p == nullptr)
+                continue;
+            swap(p->left, p->right);
+            // note: it doesn't matter which side to push to s firstly
+            s.push(p->left);
+            s.push(p->right);
+        }
+
+        return root;
+    }
+};
+```
+{% endcode %}
+
