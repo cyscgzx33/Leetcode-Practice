@@ -166,3 +166,44 @@ public:
 * [Max Dod Product of Two Subsequences](https://leetcode.com/problems/max-dot-product-of-two-subsequences/)
 * [Uncrossed Lines](https://leetcode.com/problems/uncrossed-lines/)
 
+### LeetCode 72. Edit Distance
+
+Given two words _word1_ and _word2_, find the minimum number of operations required to convert _word1_ to _word2_.
+
+You have the following 3 operations permitted on a word:
+
+1. Insert a character
+2. Delete a character
+3. Replace a character
+
+**Example 1:**
+
+```text
+Input: word1 = "horse", word2 = "ros"
+Output: 3
+Explanation: 
+horse -> rorse (replace 'h' with 'r')
+rorse -> rose (remove 'r')
+rose -> ros (remove 'e')
+```
+
+**Example 2:**
+
+```text
+Input: word1 = "intention", word2 = "execution"
+Output: 5
+Explanation: 
+intention -> inention (remove 't')
+inention -> enention (replace 'i' with 'e')
+enention -> exention (replace 'n' with 'x')
+exention -> exection (replace 'n' with 'c')
+exection -> execution (insert 'u')
+```
+
+#### Logic:
+
+* Use dynamic programming to simplify the operations
+  * `dp[i][j]` represents: within `word1[0, ..., i)` and `word2[0, ..., j)` how many operations have to been done to make them same
+  * with the `dp` definition above, we need to have `m+1` and `n+1` as the size of the `dp`
+  * must initialize `dp[i][0] = i` and `dp[0][j] = j`
+
