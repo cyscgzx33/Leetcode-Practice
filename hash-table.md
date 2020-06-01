@@ -77,5 +77,17 @@ public:
 ```
 {% endcode %}
 
+## Type 2: Multiset / Multimap
 
+### A postmates OA question:
+
+![Postmates\_OA\_question\_1](.gitbook/assets/postmates_pic_1.png)
+
+![Postmates\_OA\_quetions\_2](.gitbook/assets/postmates_pic_2.png)
+
+#### Logic:
+
+![Proving the correctness: Indcution, page 1](.gitbook/assets/post_mate_logic_1.jpg)
+
+![Proving the correctness: Indcution, page 2](.gitbook/assets/post_mate_logic_2.jpg)
 
