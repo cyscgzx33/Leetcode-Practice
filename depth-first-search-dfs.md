@@ -190,3 +190,7 @@ public:
 ```
 {% endcode %}
 
+#### Similar topics:
+
+* Path sum questions on a binary search tree
+
