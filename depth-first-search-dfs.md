@@ -100,6 +100,81 @@ public:
 ```
 {% endcode %}
 
+### LintCode 427. Generate Paranthesis
+
+Given n, and there are n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+
+#### Example
+
+**Example 1:**
+
+```text
+Input: 3
+Output: ["((()))", "(()())", "(())()", "()(())", "()()()"]
+```
+
+**Example 2:**
+
+```text
+Input: 2
+Output: ["()()", "(())"]
+```
+
+#### Logic:
+
+* The whole architecture of this problram is very similar to a _**binary tree**_
+* DFS flows:
+  * Step 0: check validness of value `l` and `r`
+  * Step 1: \(ending criteria\) gather information if `l == n && r == n`
+  * Step 2: \(DFS iteration\) expand the next steps:
+    * adding `'('` while updating `l` by `l = l + 1` \( &lt;=&gt; stepping into the left subtree \)
+    * adding `')'` while updating `r` by `r = r + 1` **\(** &lt;=&gt;  stepping into the right subtree \)
+
+![LintCode 427. Generate Paranthesis](.gitbook/assets/lepic2.jpg)
+
+#### Sample Code:
+
+{% code title="generate\_paranthesis.cpp" %}
+```cpp
+class Solution {
+public:
+    /**
+     * @param n: n pairs of parentheses
+     * @param l: number of left parantheses used
+     * @param r: number of right parantheses used
+     * @param result: a valid combination of parantheses generated in current loop
+     * @param results: an array of generated parantheses
+     */ 
+    void dfs(int n, int l, int r, string result, vector<string>& results) {
+        // step 0: check if the l and r have valid values
+        if (l > n || r > n || l < r) return;
+        // step 1: ending criteria
+        if (l == n && r == n) {
+            results.push_back(result);
+            return;
+        }
+        // step 2: recurssion's next steps -- imagining this is iterating a binary tree recursively
+        // first go to left subtree -- adding '('
+        dfs(n, l+1, r, result + '(', results);
+        // secondly go to right subtree -- addig ')'
+        dfs(n, l, r+1, result + ')', results);
+    }
+
+    /**
+     * @param n: n pairs
+     * @return: All combinations of well-formed parentheses
+     */
+    vector<string> generateParenthesis(int n) {
+        // write your code here
+        vector<string> results;
+        string result = "";
+        dfs(n, 0, 0, result, results);
+        return results;
+    }
+};
+```
+{% endcode %}
+
 ## Type 2: DFS on a Binary Tree
 
 ### LintCode 535. House Robber III
