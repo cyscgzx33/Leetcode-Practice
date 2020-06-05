@@ -6,8 +6,8 @@
 
 Giving a string with number from 1-`n` in random order, but miss `1` number.Find that number.
 
-n &lt;= 30  
-Data guarantees have only one solutionHave you met this question in a real interview?  YesProblem Correction
+* _n &lt;= 30_
+* _Data guarantees have only one solution_
 
 #### Example
 
@@ -95,6 +95,96 @@ public:
         // write your code here
         vector<int> visit(n+1, 0);
         return dfs(n, str, 0, 0, visit);
+    }
+};
+```
+{% endcode %}
+
+## Type 2: DFS on a Binary Tree
+
+### LintCode 535. House Robber III
+
+The thief has found himself a new place for his thievery again. There is only one entrance to this area, called the "root." Besides the root, each house has one and only one parent house. After a tour, the smart thief realized that "all houses in this place forms a binary tree". It will automatically contact the police if two directly-linked houses were broken into on the same night.
+
+Determine the maximum amount of money the thief can rob tonight without alerting the police.
+
+This problem is the extention of [House Robber](http://www.lintcode.com/problem/house-robber/) and [House Robber II](http://www.lintcode.com/problem/house-robber-ii/)
+
+#### Example
+
+**Example1**
+
+```text
+Input:  {3,2,3,#,3,#,1}
+Output: 7
+Explanation:
+Maximum amount of money the thief can rob = 3 + 3 + 1 = 7.
+  3
+ / \
+2   3
+ \   \ 
+  3   1
+```
+
+**Example2**
+
+```text
+Input:  {3,4,5,1,3,#,1}
+Output: 9
+Explanation:
+Maximum amount of money the thief can rob = 4 + 5 = 9.
+    3
+   / \
+  4   5
+ / \   \ 
+1   3   1
+```
+
+#### Logic:
+
+* Use two information items during the robber's trajectory, i.e., at each root of a subtree:
+  * First number: with robbering the house @root
+  * Second number: without robbering the house @root
+
+#### Sample Code:
+
+{% code title="house\_robber\_iii.cpp" %}
+```cpp
+/**
+ * Definition of TreeNode:
+ * class TreeNode {
+ * public:
+ *     int val;
+ *     TreeNode *left, *right;
+ *     TreeNode(int val) {
+ *         this->val = val;
+ *         this->left = this->right = NULL;
+ *     }
+ * }
+ */
+
+class Solution {
+public:
+    /**
+     * @param root: the root of binary tree.
+     * @return: maximum amount of money with rubbing or not the root
+     */
+    pair<int, int> dfs(TreeNode* root) {
+        if (root == nullptr) return {0, 0};
+        pair<int, int> left = dfs(root->left), right = dfs(root->right);
+        
+        return {root->val + left.second + right.second, 
+                max(right.first, right.second) + max(left.first, left.second)}; 
+    }
+
+    /**
+     * @param root: The root of binary tree.
+     * @return: The maximum amount of money you can rob tonight
+     */
+    int houseRobber3(TreeNode * root) {
+        // write your code here
+        pair<int, int> head = dfs(root);
+        return max(head.first, head.second);
     }
 };
 ```
