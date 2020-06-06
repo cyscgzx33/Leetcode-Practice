@@ -345,5 +345,80 @@ public:
 ```
 {% endcode %}
 
+## Type 4: Lowerbound related Questions
 
+### LeetCode 528. Random Pick with Weight
+
+Given an array `w` of positive integers, where `w[i]` describes the weight of index `i`, write a function `pickIndex` which randomly picks an index in proportion to its weight.
+
+Note:
+
+1. `1 <= w.length <= 10000`
+2. `1 <= w[i] <= 10^5`
+3. `pickIndex` will be called at most `10000` times.
+
+**Example 1:**
+
+```text
+Input: 
+["Solution","pickIndex"]
+[[[1]],[]]
+Output: [null,0]
+```
+
+**Example 2:**
+
+```text
+Input: 
+["Solution","pickIndex","pickIndex","pickIndex","pickIndex","pickIndex"]
+[[[1,3]],[],[],[],[],[]]
+Output: [null,0,1,1,1,0]
+```
+
+**Explanation of Input Syntax:**
+
+The input is two lists: the subroutines called and their arguments. `Solution`'s constructor has one argument, the array `w`. `pickIndex` has no arguments. Arguments are always wrapped with a list, even if there aren't any.
+
+#### Logic:
+
+* It's easy to figure out use `pfsum` and `lower_bound` to solve it
+* An important detail: `res = *lb == pick ? lb - pfsum.begin() : lb - pfsum.begin() - 1;`
+  * `lower_bound` finds the **smallest value** that is **larger than or equal** **to** the target
+  * the answer \(index\) we want to find is **"left closed, right open"** range
+  * Check the example for reference
+
+![LeetCode 528, an example to illustrate](.gitbook/assets/leetcode_528_pic.jpg)
+
+#### Sample Code:
+
+{% code title="random\_pick\_with\_weight.cpp" %}
+```cpp
+class Solution {
+public:
+    vector<int> pfsum;
+    int total_sum = 0;
+    Solution(vector<int>& w) {
+        int n = w.size();
+        pfsum.assign(n+1, 0);
+        for (int i = 0; i < n; i++) {
+            pfsum[i+1] = w[i] + pfsum[i]; 
+        }
+        total_sum = pfsum[n];
+    }
+    int pickIndex() {
+        int pick = rand() % total_sum;
+        auto lb = lower_bound(pfsum.begin(), pfsum.end(), pick);
+        int index = lb - pfsum.begin();
+        if (*lb > pick) index--;
+        return index;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(w);
+ * int param_1 = obj->pickIndex();
+ */
+```
+{% endcode %}
 
