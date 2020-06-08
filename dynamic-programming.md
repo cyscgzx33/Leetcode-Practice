@@ -268,3 +268,116 @@ exection -> execution (insert 'u')
   * with the `dp` definition above, we need to have `m+1` and `n+1` as the size of the `dp`
   * must initialize `dp[i][0] = i` and `dp[0][j] = j`
 
+## Type 3: Backpack DP
+
+### LeetCode 518. Coin Change 2
+
+
+
+You are given coins of different denominations and a total amount of money. Write a function to compute the number of combinations that make up that amount. You may assume that you have infinite number of each kind of coin.
+
+* 
+**Example 1:**
+
+```text
+Input: amount = 5, coins = [1, 2, 5]
+Output: 4
+Explanation: there are four ways to make up the amount:
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+```
+
+**Example 2:**
+
+```text
+Input: amount = 3, coins = [2]
+Output: 0
+Explanation: the amount of 3 cannot be made up just with coins of 2.
+```
+
+**Example 3:**
+
+```text
+Input: amount = 10, coins = [10] 
+Output: 1
+```
+
+**Note:**
+
+You can assume that
+
+* 0 &lt;= amount &lt;= 5000
+* 1 &lt;= coin &lt;= 5000
+* the number of coins is less than 500
+* the answer is guaranteed to fit into signed 32-bit integer
+
+#### Logic:
+
+* Do the 3-step: DFS -&gt; memoized search -&gt; DP
+* Actually, the memoized search here is trying to store DFS intermediate variable, but DP is more bottom-up strategy that has few similarities with memoized search
+* A picture for DP is shown for reference
+
+![LeetCode 518. Coin Change 2](.gitbook/assets/lc518.jpg)
+
+#### Sample Code:
+
+```cpp
+class Solution {
+public:
+    // Method 1: DFS (TLE)
+    void dfs(int amount, vector<int>& coins, int i, int& cnt) {
+        if (amount <= 0) {
+            cnt += amount == 0;
+            return;
+        }
+        for (int j = i; j < coins.size(); j++) {
+            dfs(amount - coins[j], coins, j, cnt);
+        }
+    }
+    
+    int change(int amount, vector<int>& coins) {
+        int cnt = 0;
+        dfs(amount, coins, 0, cnt);
+        return cnt;
+    }
+    
+    // Method 2: Memorized Search (AC)
+    int dfs(int amount, vector<int>& coins, int i, vector<vector<int>>& memo) {
+        if (amount <= 0)  return amount == 0;
+        if (memo[amount][i] > -1) return memo[amount][i];
+        int cnt = 0;
+        for (int j = i; j < coins.size(); j++) {
+            cnt += dfs(amount - coins[j], coins, j, memo);
+        }
+        memo[amount][i] = cnt;
+        return cnt;
+    }
+    
+    int change(int amount, vector<int>& coins) {
+        if (coins.size() == 0) return amount == 0;
+        int n = coins.size();
+        // memo[i][j]: methods to achieve i amount of money using coins within kinds [j, ..., n-1]
+        vector<vector<int>> memo(amount+1, vector<int>(n, -1));
+        return dfs(amount, coins, 0, memo);
+    }
+
+    // Method 3: DP (AC)
+    int change(int amount, vector<int>& coins) {
+        int n = coins.size();
+        vector<vector<int>> dp(n+1, vector<int>(amount+1, 0));
+        dp[0][0] = 1;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j <= amount; j++) {
+                dp[i][j] += dp[i-1][j];
+                if (j >= coins[i-1]) {
+                    dp[i][j] += dp[i][j-coins[i-1]];
+                }
+            }
+        }
+        return dp[n][amount];
+    }
+};
+```
+
