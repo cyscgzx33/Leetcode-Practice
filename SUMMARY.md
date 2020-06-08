@@ -9,4 +9,5 @@
 * [Math Related Topics](math-related-topics.md)
 * [Union Find](union-find.md)
 * [Depth-First-Search \(DFS\)](depth-first-search-dfs.md)
+* [Bit Operation](bit-operation.md)
 
