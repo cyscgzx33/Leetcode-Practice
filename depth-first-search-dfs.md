@@ -175,6 +175,121 @@ public:
 ```
 {% endcode %}
 
+### LintCode 802. Sudoku Solver
+
+#### Description
+
+Write a program to solve a Sudoku puzzle by filling the empty cells.
+
+Empty cells are indicated by the number `0`.
+
+You may assume that there will be only one unique solution.
+
+#### Example
+
+**Example 1:**
+
+```text
+Given a Sudoku puzzle:
+```
+
+![](https://lintcode-media.s3.amazonaws.com/problem/250px-Sudoku-by-L2G-20050714.svg.png)
+
+```text
+Return its solution:
+```
+
+![](https://lintcode-media.s3.amazonaws.com/problem/250px-Sudoku-by-L2G-20050714_solution.svg.png)
+
+#### Logic:
+
+* The `dfs()` must return a `bool` indicator, to be used as a **flag** during the loop that help us decide _"shall we end the loop after finding a valid solution"_
+* It's convinient to use function `isValid()`to check if a proposed `num (1~9)` is valid given the configuration
+* The code is self-explatory, refer it for further information
+
+{% code title="sudoku\_solver.cpp" %}
+```cpp
+class Solution {
+public:
+    /**
+     * @param board: the sudoku puzzle
+     * @param r: current row
+     * @param c: current col
+     * @param num: current trial number (1-9)
+     * @return: if a feasible solution is found
+     */
+    bool dfs(vector<vector<int>>& board, int r, int c) {
+        // go beyond each row
+        if (c >= 9) return dfs(board, r+1, 0);
+
+        // finished every cell
+        if (r >= 9) return true;
+
+        // if at a filled cell, go next cell
+        if (board[r][c] > 0) return dfs(board, r, c+1);
+
+        // try each numer at an empty cell
+        for (int i = 1; i <= 9; i++) {
+            // if not valid, go to next choice of number
+            if (!isValid(board, r, c, i)) continue;
+
+            // propose the valid number
+            board[r][c] = i;
+            
+            // only return true (end the loop) if dfs() is true;
+            // but if it is false, still have chance to correct, don't just return false (end the loop)
+            if (dfs(board, r, c+1)) return true;
+
+            // backtrack
+            board[r][c] = 0;
+        }
+
+        // if after trying 9 choices still not good, go back
+        return false;
+    }
+
+    /**
+     * @param board: the sudoku puzzle
+     * @param r: current row
+     * @param c: current col
+     * @param num: the propsed number
+     * @return: if the current configuartion of the sudoku puzzle is valid
+     */
+    bool isValid(vector<vector<int>>& board, int r, int c, int num) {
+        // check horizontal line
+        for (int i = 0; i < 9; i++) {
+            if (board[r][i] == num) return false;
+        }
+
+        // check vertical line
+        for (int i = 0; i < 9; i++) {
+            if (board[i][c] == num) return false;
+        }
+
+        // check the current 3-by-3-block
+        int cur_bol_i = r / 3; // current block index, i
+        int cur_bol_j = c / 3; // current block index, j
+        for (int i = cur_bol_i*3; i < cur_bol_i*3 + 3; i++) {
+            for (int j = cur_bol_j*3; j < cur_bol_j*3 + 3; j++) {
+                if (board[i][j] == num) return false;
+            }
+        }
+
+        // if no duplicate number found, the proposal is valid
+        return true;
+    }
+
+    /**
+     * @param board: the sudoku puzzle
+     * @return: nothing
+     */
+    void solveSudoku(vector<vector<int>> &board) {
+        dfs(board, 0, 0);
+    }
+};u
+```
+{% endcode %}
+
 ## Type 2: DFS on a Binary Tree
 
 ### LintCode 535. House Robber III

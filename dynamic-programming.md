@@ -323,6 +323,7 @@ You can assume that
 
 #### Sample Code:
 
+{% code title="coin\_change\_2.cpp" %}
 ```cpp
 class Solution {
 public:
@@ -380,4 +381,5 @@ public:
     }
 };
 ```
+{% endcode %}
 
