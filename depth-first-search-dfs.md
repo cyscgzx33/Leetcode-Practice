@@ -290,6 +290,133 @@ public:
 ```
 {% endcode %}
 
+### LintCode 634. Word Squares
+
+#### Description
+
+Given a set of words **without duplicates**, find all [`word squares`](https://en.wikipedia.org/wiki/Word_square) you can build from them.
+
+A sequence of words forms a valid word square if the kth row and column read the exact same string, where 0 ≤ k &lt; max\(numRows, numColumns\).
+
+For example, the word sequence `["ball","area","lead","lady"]` forms a word square because each word reads the same both horizontally and vertically.
+
+```text
+b a l l
+a r e a
+l e a d
+l a d y
+```
+
+* There are at least 1 and at most 1000 words.
+* All words will have the exact same length.
+* Word length is at least 1 and at most 5.
+* Each word contains only lowercase English alphabet `a-z`.
+
+#### Example
+
+**Example 1:**
+
+```text
+Input:
+["area","lead","wall","lady","ball"]
+Output:
+[["wall","area","lead","lady"],["ball","area","lead","lady"]]
+
+Explanation:
+The output consists of two word squares. The order of output does not matter (just the order of words in each word square matters).
+```
+
+**Example 2:**
+
+```text
+Input:
+["abat","baba","atan","atal"]
+Output:
+ [["baba","abat","baba","atan"],["baba","abat","baba","atal"]]
+```
+
+#### Logic:
+
+* use `prefix` to rule out invalid words, check the construction of `prefix` at each dfs step
+
+
+
+#### Sample Code:
+
+{% code title="word\_squares.cpp" %}
+```cpp
+class Solution {
+public:
+    /**
+     * @param words: a set of words without duplicates
+     * @param pf_dict: a hashmap containing all the words by the key of prefix
+     * @param k: the word length
+     * @param result: the current trial of result
+     * @param results: collection of valid results
+     * @param prefix: the required prefix of current configuration of result
+     * @return: nothing
+     */
+    void memoSearch(vector<string>& words,
+                    unordered_map<string, unordered_set<string>>& pf_dict,
+                    int k,
+                    vector<string>& result,
+                    vector<vector<string>>& results,
+                    string prefix) {
+        // exit criteria
+        if (result.size() == k) {
+            results.push_back(result);
+            return;
+        }
+
+        // construct the prefix (reset it first)
+        int idx = result.size();
+        prefix = "";
+        for (int i = 0; i < idx; i++) {
+            prefix.push_back(result[i][idx]); // draw a picture and can be easily obtained
+        }
+        
+        // loop the given words to continue dfs
+        for (auto word : pf_dict[prefix]) {
+            result.push_back(word);
+            memoSearch(words, pf_dict, k, result, results, prefix);
+            result.pop_back();
+        }
+    }
+
+    /**
+     * @param words: a set of words without duplicates
+     * @return: all word squares
+     */
+    vector<vector<string>> wordSquares(vector<string> &words) {
+        if (words.size() == 0) return {};
+        int k = words[0].size();
+        unordered_map<string, unordered_set<string>> pf_dict; // key: prefix, value: unordered_set of strings with the given prefix
+
+        // Step I: construct the pf_dict hash map
+        // 1. key of empty string has all the given words as its val
+        // 2. loop each prefix
+        pf_dict[""] = {};
+        for (auto word : words) {
+            pf_dict[""].insert(word);
+            for (int i = 1; i <= word.size(); i++) {
+                string prefix = word.substr(0, i);
+                if (pf_dict.count(prefix) == 0) pf_dict.insert({prefix, {}});
+                pf_dict[prefix].insert(word);
+            }
+        }
+
+        // Step II: conduct the dfs / memoSearch
+        vector<string> result;
+        vector<vector<string>> results;
+        string prefix = "";
+        memoSearch(words, pf_dict, k, result, results, prefix);
+        
+        return results;
+    }
+};
+```
+{% endcode %}
+
 ## Type 2: DFS on a Binary Tree
 
 ### LintCode 535. House Robber III
