@@ -337,11 +337,13 @@ Output:
 
 #### Logic:
 
-* use `prefix` to rule out invalid words, check the construction of `prefix` at each dfs step
-* use  `surfices` to rule out invalid words \(PENDING TO BE IMPLEMENTED\)
-* check the picture below for reference \(PENDING TO BE DRAWN\)
+* Use two points of cutting branches to speed up the algorithm
+  * Point 1: use `prefix` to rule out invalid words, i.e., at each new step, must check previous filled rows to start with a solid `prefix`
+  * Point 2:  after completing each row, check for the sake of next rows, that if there's any valid choices of based on the current configuration; if one of them not even existing, just don't even bother push forward and just stop at this step.
+  * \(Point 2:  PENDING TO BE IMPLEMENTED IN THE CODE\)
+* check the picture below for reference
 
-
+![LintCode 634. Word Squares](.gitbook/assets/lint634.jpg)
 
 #### Sample Code:
 
