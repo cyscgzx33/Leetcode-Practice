@@ -338,6 +338,8 @@ Output:
 #### Logic:
 
 * use `prefix` to rule out invalid words, check the construction of `prefix` at each dfs step
+* use  `surfices` to rule out invalid words \(PENDING TO BE IMPLEMENTED\)
+* check the picture below for reference \(PENDING TO BE DRAWN\)
 
 
 
