@@ -149,6 +149,87 @@ public:
 ```
 {% endcode %}
 
+### LeetCode 368. Largest Divisible Subset
+
+Given a set of **distinct** positive integers, find the largest subset such that every pair \(Si, Sj\) of elements in this subset satisfies:
+
+Si % Sj = 0 or Sj % Si = 0.
+
+If there are multiple solutions, return any subset is fine.
+
+**Example 1:**
+
+```text
+Input: [1,2,3]
+Output: [1,2] (of course, [1,3] will also be ok)
+```
+
+**Example 2:**
+
+```text
+Input: [1,2,4,8]
+Output: [1,2,4,8]
+```
+
+#### Logic:
+
+* Using dynamic programming to speed up the calculation, where
+  * `dp[i]`: max length of divisible set ending @ index `i`;
+  * iterating order: \(very similar as LIS\) pivoting at `i` firstly, and loop `0 <= j < i`; 
+  * transition equation: check the code
+* Need some helping variables to construct the actual subset `res` later \(very similar trick as LIS\):
+  * Need to have a `parent[i]` to record the last largest divisor of `nums[i]`
+  * Need to record the largest length `max_len` and itsnding position `max_idx`
+
+#### Sample Code:
+
+{% code title="largest\_divisible\_sets.cpp" %}
+```cpp
+class Solution {
+public:
+    vector<int> largestDivisibleSubset(vector<int>& nums) {
+        int n = nums.size();
+        if (n == 0) return {};
+        
+        // must sort first
+        sort(nums.begin(), nums.end());
+        vector<int> dp(n, 1);       // dp[i]: max length of divisible set ending @ index i
+        vector<int> parent(n, -1);  // parent[i]: the last largest divisor of nums[i]
+        int max_len = 1, max_idx = 0;
+        
+        // loop and construct dp: it's very similar to LIS
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (nums[i] % nums[j] == 0 && dp[i] < dp[j] + 1) {
+                    dp[i] = dp[j] + 1;
+                    parent[i] = j;
+                    
+                    if (dp[i] > max_len) {
+                        max_len = dp[i];
+                        max_idx = i;
+                    }
+                }
+            }
+        }
+        
+        // construct the res using the parent array
+        vector<int> res;
+        int idx = max_idx;
+        for (int i = 0; i < max_len; i++) {
+            res.push_back(nums[idx]);
+            idx = parent[idx];
+        }
+        
+        return res;
+    }
+};
+```
+{% endcode %}
+
+#### Similar Puzzles:
+
+* [LeetCode 300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
+
 ## Type 2: Two-Sequence
 
 ### LeetCode 1143. Longest Common Subsequence
