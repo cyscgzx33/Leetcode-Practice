@@ -8,8 +8,8 @@
 * [Dynamic Programming](dynamic-programming.md)
 * [Math Related Topics](math-related-topics.md)
 * [Union Find](union-find.md)
+* [Breadth-First-Search \(BFS\)](breadth-first-search-bfs.md)
 * [Depth-First-Search \(DFS\)](depth-first-search-dfs.md)
 * [Bit Operation](bit-operation.md)
 * [Two Pointers](two-pointers.md)
-* [Breadth-First-Search \(BFS\)](breadth-first-search-bfs.md)
 
