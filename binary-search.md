@@ -345,6 +345,70 @@ public:
 ```
 {% endcode %}
 
+### LeetCode 275. H-index II
+
+Given an array of citations **sorted in ascending order** \(each citation is a non-negative integer\) of a researcher, write a function to compute the researcher's h-index.
+
+According to the [definition of h-index on Wikipedia](https://en.wikipedia.org/wiki/H-index): "A scientist has index h if h of his/her N papers have **at least** h citations each, and the other N − h papers have **no more than** h citations each."
+
+**Example:**
+
+```text
+Input: citations = [0,1,3,5,6]
+Output: 3 
+Explanation: [0,1,3,5,6] means the researcher has 5 papers in total and each of them had 
+             received 0, 1, 3, 5, 6 citations respectively. 
+             Since the researcher has 3 papers with at least 3 citations each and the remaining 
+             two with no more than 3 citations each, her h-index is 3.
+```
+
+**Note:**
+
+If there are several possible values for _h_, the maximum one is taken as the h-index.
+
+**Follow up:**
+
+* This is a follow up problem to [H-Index](https://leetcode.com/problems/h-index/description/), where `citations` is now guaranteed to be sorted in ascending order.
+* Could you solve it in logarithmic time complexity?
+
+#### Logic:
+
+* Clearly we need to use the binary search here, but how to make it smooth? At each comparison, think in this way: 
+  * Apparently, people normally pursue **higher H-index.** Thus, at first, propose number of qualified papers, which is defined as `num` in the code, and calculated by `num = n - mid`. Now, we can judge this proposal by comparing `citations[mid]` and `num`.
+  * Case I: `citations[mid] >= num`. In this case, all the right side citations are even larger than or equal to`citations[mid]`, so the proposal `num` is valid \(refer to the definition of H-index\), i.e., the H-index of this person must be larger than or equal to`num`. Therefore, all the smaller H-index proposals will not be we need to check the left side proposals. Thus, `r = mid`.
+
+#### Sample Code:
+
+{% code title="h\_index\_ii.cpp" %}
+```cpp
+class Solution {
+public:
+    int hIndex(vector<int>& citations) {
+        int n = citations.size();
+        if (n == 0) return 0;
+        
+        // binary search
+        int l = 0, r = n - 1;
+        while (l + 1 < r) {
+            int mid = (l + r) / 2;
+            int num = n - mid; // a proposal of h_index
+            if (citations[mid] >= num) {
+                // all the candidates of H-index from right side will be too small
+                r = mid;
+            } else {
+                // all the candidates left side will be invalid, because they are even smaller
+                l = mid;
+            }
+        }
+        
+        if (citations[l] >= n - l) return n - l;
+        else if (citations[r] >= n - r) return n - r;
+        else return n - r - 1;
+    }
+};
+```
+{% endcode %}
+
 ## Type 4: Lowerbound related Questions
 
 ### LeetCode 528. Random Pick with Weight
