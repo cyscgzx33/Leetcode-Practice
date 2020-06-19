@@ -375,7 +375,12 @@ If there are several possible values for _h_, the maximum one is taken as the h-
 
 * Clearly we need to use the binary search here, but how to make it smooth? At each comparison, think in this way: 
   * Apparently, people normally pursue **higher H-index.** Thus, at first, propose number of qualified papers, which is defined as `num` in the code, and calculated by `num = n - mid`. Now, we can judge this proposal by comparing `citations[mid]` and `num`.
-  * Case I: `citations[mid] >= num`. In this case, all the right side citations are even larger than or equal to`citations[mid]`, so the proposal `num` is valid \(refer to the definition of H-index\), i.e., the H-index of this person must be larger than or equal to`num`. Therefore, all the smaller H-index proposals will not be we need to check the left side proposals. Thus, `r = mid`.
+  * _Case I_: `citations[mid] >= num`. In this case, all the right side citations are even larger than or equal to`citations[mid]`, so the proposal `num` is valid \(refer to the definition of H-index\), i.e., the H-index of this person must be larger than or equal to`num`. Therefore, all the smaller H-index proposals will not be we need to check the right side proposals \(Remember, right side means SMALLER H-index proposals\). Thus, `r = mid`.
+  * _Case II_: `citations[mid] < num`. In this case, the proposal`num`is not valid, which means the left side proposals are even more aggressive, which will be not valid. Thus, `l = mid`. 
+* Take care of the final check:
+  * Firstly check the most aggressive H-index proposal, which is `l`
+  * Secondly check the milder H-index proposal, which is `r`
+  * Thirdly \(don't forget this!\), if the `r` check is failed, which will only happen in 1- or 2-element cases, then the final result should be `n - r - 1` , which shall be `0` actually.
 
 #### Sample Code:
 
@@ -396,11 +401,12 @@ public:
                 // all the candidates of H-index from right side will be too small
                 r = mid;
             } else {
-                // all the candidates left side will be invalid, because they are even smaller
+                // all the candidates left side will be invalid, which are even more aggressive
                 l = mid;
             }
         }
         
+        // Important: final check
         if (citations[l] >= n - l) return n - l;
         else if (citations[r] >= n - r) return n - r;
         else return n - r - 1;
