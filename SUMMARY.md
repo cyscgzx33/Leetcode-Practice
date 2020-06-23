@@ -12,4 +12,5 @@
 * [Depth-First-Search \(DFS\)](depth-first-search-dfs.md)
 * [Bit Operation](bit-operation.md)
 * [Two Pointers](two-pointers.md)
+* [Sort](sort.md)
 
