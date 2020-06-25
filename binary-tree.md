@@ -311,3 +311,69 @@ public:
 ```
 {% endcode %}
 
+## Type 4: Depth related
+
+### LeetCode 222. Count Complete Tree Nodes
+
+Given a **complete** binary tree, count the number of nodes.
+
+**Note:**
+
+**Definition of a complete binary tree from** [**Wikipedia**](http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees)**:**  
+In a complete binary tree every level, except possibly the last, is completely filled, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.
+
+**Example:**
+
+```text
+Input: 
+    1
+   / \
+  2   3
+ / \  /
+4  5 6
+
+Output: 6
+```
+
+#### Logic:
+
+* Use the strategy of divide and conquer, check [this discussion page](https://leetcode.com/problems/count-complete-tree-nodes/discuss/61958/Concise-Java-solutions-O%28log%28n%292%29) for detailed information
+
+![count\_complete\_tree\_nodes](.gitbook/assets/count_complete_tree_nodes.jpg)
+
+{% code title="count\_complete\_tree\_nodes.cpp" %}
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int height(TreeNode* root) {
+        if (!root) return 0; // one node has height 1, zero node has height 0
+        return 1 + height(root->left);
+    }
+    
+    int countNodes(TreeNode* root) {
+        if (!root) return 0;
+        int h = height(root);
+
+        // Note: pow(2, n) == 1 << n
+        // example: 1 << 0 == 1, 1 << 1 == 2, 1 << 2 == 4, 1 << 3 == 8 ... 1 << n == 2^n
+        if (height(root->right) == h - 1) { // the last node is on right subtree => left subtree has full nodes => left: 2^(h-1)-1 == (1 << h-1) - 1
+            return ( 1 << h-1 ) + countNodes(root->right); // left(2^(h-1)-1) + root(1) + right
+        } else { // the last node is on left subtree => right subtree has full nodes within h-2 levels => right: 2^(h-2) - 1 == (1 << h-2) - 1
+            return ( 1 << h-2 ) + countNodes(root->left); // right(2^(h-2)-1) + root(1) + left
+        }
+    }
+};
+```
+{% endcode %}
+
