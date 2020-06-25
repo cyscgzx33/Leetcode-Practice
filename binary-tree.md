@@ -377,3 +377,57 @@ public:
 ```
 {% endcode %}
 
+## Type 5: Binary Search Tree
+
+### LeetCode 96. Unique Binary Search Trees
+
+Given _n_, how many structurally unique **BST's** \(binary search trees\) that store values 1 ... _n_?
+
+**Example:**
+
+```text
+Input: 3
+Output: 5
+Explanation:
+Given n = 3, there are a total of 5 unique BST's:
+
+   1         3     3      2      1
+    \       /     /      / \      \
+     3     2     1      1   3      2
+    /     /       \                 \
+   2     1         2                 3
+```
+
+#### Logic:
+
+* Try to find the trend and conclude it, finally reach the result \(pretty much same as factorial calculation\)
+
+![unique\_binary\_search\_trees](.gitbook/assets/unique_binary_search_trees.jpg)
+
+{% code title="unique\_binary\_search\_trees.cpp" %}
+```cpp
+class Solution {
+private:
+    vector<int> num_trees;
+public:
+    void assignTrees(int k) {
+        if (k <= 2) {
+            num_trees[k] = k;
+            return;
+        }
+        int res = 0;
+        for (int i = 0; i < k; i++) {
+            if (i == 0 || i == k-1) res += num_trees[k-1];
+            else res += num_trees[i] * num_trees[k-i-1];
+        }
+        num_trees[k] = res;
+    }
+    int numTrees(int n) {
+        num_trees.assign(n+1, 0); // num_trees[0] will not be used
+        for (int i = 0; i <= n; i++) assignTrees(i);
+        return num_trees[n];
+    }
+};
+```
+{% endcode %}
+
