@@ -520,3 +520,60 @@ public:
 ```
 {% endcode %}
 
+### LeetCode 279. Perfect Squares
+
+Given a positive integer n, find the least number of perfect square numbers \(for example, `1, 4, 9, 16, ...`\) which sum to n.
+
+**Example 1:**
+
+```text
+Input: n = 12
+Output: 3 
+Explanation: 12 = 4 + 4 + 4.
+```
+
+**Example 2:**
+
+```text
+Input: n = 13
+Output: 2
+Explanation: 13 = 4 + 9.
+```
+
+#### Logic:
+
+* Backpack type dp would be fitting the requirement
+
+![LC279. Perfect Sqaures](.gitbook/assets/perfect_squares.jpg)
+
+#### Sample Code:
+
+{% code title="perfect\_squares.cpp" %}
+```cpp
+class Solution {
+public:
+    int numSquares(int n) {
+        // backpack dp
+        // dp[i][j]: using square numbers no larger than i^2, what is the minimum numbers used to come up with j
+        // here, we eliminate the i-dim to save space
+        vector<int> dp(n+1, 0);
+        int sq = floor(sqrt(n));
+        
+        // initialization: by only using 1 as the element to come up with each target i
+        for (int j = 1; j <= n; j++) dp[j] = j;
+        
+        // dp[i][j] = min(dp[i-1][j], dp[i][j-i*i] + 1)
+        // because we eliminate the i-dim, dp[j] = min(dp[j], dp[j-i^2] + 1)
+        for (int i = 2; i <= sq; i++) {
+            int i_sq = i * i;
+            for (int j = 1; j <= n; j++) {
+                if (j >= i_sq) dp[j] = min(dp[j], dp[j-i_sq] + 1);
+            }
+        }
+        
+        return dp[n];
+    }
+};
+```
+{% endcode %}
+
