@@ -51,3 +51,102 @@ public:
 ```
 {% endcode %}
 
+## Type 2: Classic Opposite Two-pointers
+
+### LeetCode 1498. Number of Subsequences That Satisfy the Given Sum Condition
+
+Given an array of integers `nums` and an integer `target`.
+
+Return the number of **non-empty** subsequences of `nums` such that the sum of the minimum and maximum element on it is less or equal than `target`.
+
+Since the answer may be too large, return it modulo 10^9 + 7.
+
+**Example 1:**
+
+```text
+Input: nums = [3,5,6,7], target = 9
+Output: 4
+Explanation: There are 4 subsequences that satisfy the condition.
+[3] -> Min value + max value <= target (3 + 3 <= 9)
+[3,5] -> (3 + 5 <= 9)
+[3,5,6] -> (3 + 6 <= 9)
+[3,6] -> (3 + 6 <= 9)
+```
+
+**Example 2:**
+
+```text
+Input: nums = [3,3,6,8], target = 10
+Output: 6
+Explanation: There are 6 subsequences that satisfy the condition. (nums can have repeated numbers).
+[3] , [3] , [3,3], [3,6] , [3,6] , [3,3,6]
+```
+
+**Example 3:**
+
+```text
+Input: nums = [2,3,3,4,6,7], target = 12
+Output: 61
+Explanation: There are 63 non-empty subsequences, two of them don't satisfy the condition ([6,7], [7]).
+Number of valid subsequences (63 - 2 = 61).
+```
+
+**Example 4:**
+
+```text
+Input: nums = [5,2,4,1,7,6,8], target = 16
+Output: 127
+Explanation: All non-empty subset satisfy the condition (2^7 - 1) = 127
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 10^5`
+* `1 <= nums[i] <= 10^6`
+* `1 <= target <= 10^6`
+
+#### Logic:
+
+* Need to figure out this problem shall be solve by **opposite two-pointers** method
+* Take care of the `getPowerOf2()` function, we must implement **binary search**, otherwise the time complexity will be so high that we get TLE on the OJ
+
+#### Sample Code:
+
+{% code title="number\_of\_subsequences\_that\_satisfy\_the\_given\_sum\_condition.cpp" %}
+```cpp
+class Solution {
+private:
+    long modulo = pow(10, 9) + 7;
+    
+    // Note: Need to use binary search to calculate power of 2 quickly, otherwise it will TLE
+    long getPowerOf2(int n) {
+        if (n == 0) return 1;
+        long half = getPowerOf2(n/2);
+        int rem = n % 2;
+        return ( (half * half) % modulo * ((long)1 << rem) ) % modulo; 
+    }
+public:
+    int numSubseq(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int n = nums.size(), l = 0, r = n-1;
+        long cnt = 0;
+        
+        while (l <= r) {
+            if (nums[l] + nums[r] <= target) {
+                cnt = (cnt + getPowerOf2(r-l)) % modulo;
+                l++;
+            } else {
+                // use upper_bound to find the proper r (or... simply r--)
+                int r_target = target - nums[l];
+                auto ub = upper_bound(nums.begin() + l, nums.begin() + r, r_target);
+                if (ub == nums.end()) break;
+                r = ub - nums.begin() - 1;
+            }
+        }
+
+        return cnt;        
+    }
+};
+```
+{% endcode %}
+
