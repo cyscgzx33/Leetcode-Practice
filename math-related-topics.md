@@ -1,6 +1,6 @@
 # Math Related Topics
 
-## Type 1: Factors / GCD
+## Type 1: Factors / GCD / Congruence
 
 ### LintCode 235. Prime Factorization
 
@@ -58,6 +58,82 @@ public:
 };
 ```
 {% endcode %}
+
+### LeetCode 1497. Check If Array Pairs are Divisible by k
+
+1497. Check If Array Pairs Are Divisible by kMedium485Add to ListShare
+
+Given an array of integers `arr` of even length `n` and an integer `k`.
+
+We want to divide the array into exactly `n / 2` pairs such that the sum of each pair is divisible by `k`.
+
+Return _True_ If you can find a way to do that or _False_ otherwise.
+
+**Example 1:**
+
+```text
+Input: arr = [1,2,3,4,5,10,6,7,8,9], k = 5
+Output: true
+Explanation: Pairs are (1,9),(2,8),(3,7),(4,6) and (5,10).
+```
+
+**Example 2:**
+
+```text
+Input: arr = [1,2,3,4,5,6], k = 7
+Output: true
+Explanation: Pairs are (1,6),(2,5) and(3,4).
+```
+
+**Example 3:**
+
+```text
+Input: arr = [1,2,3,4,5,6], k = 10
+Output: false
+Explanation: You can try all possible pairs to see that there is no way to divide arr into 3 pairs each with sum divisible by 10.
+```
+
+**Example 4:**
+
+```text
+Input: arr = [-10,10], k = 2
+Output: true
+```
+
+**Example 5:**
+
+```text
+Input: arr = [-1,1,-2,2,-3,3,-4,4], k = 3
+Output: true
+```
+
+**Constraints:**
+
+* `arr.length == n`
+* `1 <= n <= 10^5`
+* `n` is even.
+* `-10^9 <= arr[i] <= 10^9`
+* `1 <= k <= 10^5`
+
+Logic:
+
+* Use congruence to lower down the complexity:
+* For the given `arr` we have to map them into the range of `0<= arr[i] < k`, following the equation, the initial `arr` is denoted as set X while the mapped `arr_mapped` is denoted as set Y
+  * Note: the reason to use set instead of array is that, we're going to count the frequency of each element, so they're treated identical:
+
+$$
+X=\{x_1, x_2, ..., x_n \}
+$$
+
+$$
+Y=\{y_1, y_2, ..., y_m\}, \ where\ y_i\in[0, k)\  \forall i\in[1,m]  \\\forall y_i\in Y,\exists x_j \in X, t_i\in \mathbb{Z}, \ s.t. \ x_i = t_ik+ y_i
+$$
+
+* Proof \(check the picture below\)
+
+![LC1497 Proof](.gitbook/assets/lc1497_pic.jpg)
+
+
 
 ## Type 2: Probability
 
