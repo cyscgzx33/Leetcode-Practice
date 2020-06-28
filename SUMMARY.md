@@ -13,4 +13,5 @@
 * [Bit Operation](bit-operation.md)
 * [Two Pointers](two-pointers.md)
 * [Sort](sort.md)
+* [Binary Index Tree \(BIT\)](binary-index-tree-bit.md)
 
