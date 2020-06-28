@@ -130,10 +130,37 @@ Y=\{y_1, y_2, ..., y_m\}, \ where\ y_i\in[0, k)\  \forall i\in[1,m]  \\\forall y
 $$
 
 * Proof \(check the picture below\)
+* Corner case 1: the given C++ `%` will generate negative remainder, need to take care of it
+* Corner case 2: need to take care of those w/ remainder equals to `0` cases 
 
 ![LC1497 Proof](.gitbook/assets/lc1497_pic.jpg)
 
-
+{% code title="check\_if\_array\_pairs\_are\_divisible\_by\_k.cpp" %}
+```cpp
+class Solution {
+public:
+    bool canArrange(vector<int>& arr, int k) {
+        vector<int> arr_mapped(k, 0);
+        
+        // corner case 1: need to take care of the negtive remainder case
+        for (auto a : arr) {
+            int rem = a % k;
+            if (rem < 0) rem += k;
+            arr_mapped[rem]++;
+        }
+        
+        // corner case 2: need to take care of 0 remainder case
+        if (arr_mapped[0] % 2 != 0) return false;
+        
+        // regular case: check frequency
+        for (int i = 1; i < k / 2; i++) {
+            if (arr_mapped[i] != arr_mapped[k-i]) return false;
+        }
+        return true;
+    }
+};
+```
+{% endcode %}
 
 ## Type 2: Probability
 
