@@ -51,7 +51,7 @@ public:
 ```
 {% endcode %}
 
-## Type 2: Classic Opposite Two-pointers
+## Type 2: Opposite Two-pointers
 
 ### LeetCode 1498. Number of Subsequences That Satisfy the Given Sum Condition
 
@@ -145,6 +145,78 @@ public:
         }
 
         return cnt;        
+    }
+};
+```
+{% endcode %}
+
+## Type 3: Same Direction Two-pointers / Sliding Window
+
+### LeetCode 992: Subarrays with K Different Integers
+
+Given an array `A` of positive integers, call a \(contiguous, not necessarily distinct\) subarray of `A` _good_ if the number of different integers in that subarray is exactly `K`.
+
+\(For example, `[1,2,3,1,2]` has `3` different integers: `1`, `2`, and `3`.\)
+
+Return the number of good subarrays of `A`.
+
+**Example 1:**
+
+```text
+Input: A = [1,2,1,2,3], K = 2
+Output: 7
+Explanation: Subarrays formed with exactly 2 different integers: [1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2].
+```
+
+**Example 2:**
+
+```text
+Input: A = [1,2,1,3,4], K = 3
+Output: 3
+Explanation: Subarrays formed with exactly 3 different integers: [1,2,1,3], [2,1,3], [1,3,4].
+```
+
+**Note:**
+
+1. `1 <= A.length <= 20000`
+2. `1 <= A[i] <= A.length`
+3. `1 <= K <= A.length`
+
+#### Logic:
+
+* Here are two of the most important points of this puzzle, which could also be useful at other puzzles \(check the following pictures for further details with brief proof\)
+  * Convert the problem of counting **exactly** `K` ****distinct chars to counting **at least** `K` distinct chars
+  * Convert the problem of counting subarray to counting sum of lengths of ranges
+
+![LC 992, analysis and example](.gitbook/assets/lc992_1.jpg)
+
+![LC 992. Lemmas and Proof](.gitbook/assets/lc992_2.jpg)
+
+![LC 993. Example and Psudo Code](.gitbook/assets/lc992_3.jpg)
+
+#### Sample Code:
+
+{% code title="subarrays\_with\_exactly\_k\_different\_integers.cpp" %}
+```cpp
+class Solution {
+public:
+    int atMost(vector<int>& A, int K) {
+        int res = 0;
+        int l = 0, r = 0, n = A.size();
+        unordered_map<int, int> dict;
+        for (int r = 0; r < n; r++) {
+            if (dict[A[r]]++ == 0) K--;
+            while (K < 0) {
+                if (dict[A[l]]-- == 1) K++;
+                l++;
+            }
+            res += r - l + 1;
+        }
+        
+        return res;
+    }
+    int subarraysWithKDistinct(vector<int>& A, int K) {
+        return atMost(A, K) - atMost(A, K-1);
     }
 };
 ```
