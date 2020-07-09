@@ -431,3 +431,122 @@ public:
 ```
 {% endcode %}
 
+## Type 6: Level Related
+
+### LeetCode 662. Maximum Width of Binary Tree
+
+Given a binary tree, write a function to get the maximum width of the given tree. The width of a tree is the maximum width among all levels. The binary tree has the same structure as a **full binary tree**, but some nodes are null.
+
+The width of one level is defined as the length between the end-nodes \(the leftmost and right most non-null nodes in the level, where the `null` nodes between the end-nodes are also counted into the length calculation.
+
+**Example 1:**
+
+```text
+Input: 
+
+           1
+         /   \
+        3     2
+       / \     \  
+      5   3     9 
+
+Output: 4
+Explanation: The maximum width existing in the third level with the length 4 (5,3,null,9).
+```
+
+**Example 2:**
+
+```text
+Input: 
+
+          1
+         /  
+        3    
+       / \       
+      5   3     
+
+Output: 2
+Explanation: The maximum width existing in the third level with the length 2 (5,3).
+```
+
+**Example 3:**
+
+```text
+Input: 
+
+          1
+         / \
+        3   2 
+       /        
+      5      
+
+Output: 2
+Explanation: The maximum width existing in the second level with the length 2 (3,2).
+```
+
+**Example 4:**
+
+```text
+Input: 
+
+          1
+         / \
+        3   2
+       /     \  
+      5       9 
+     /         \
+    6           7
+Output: 8
+Explanation:The maximum width existing in the fourth level with the length 8 (6,null,null,null,null,null,null,7).
+
+
+```
+
+**Note:** Answer will in the range of 32-bit signed integer.
+
+#### Logic: 
+
+* Using `id` to encode each node at each level:
+  * Given `root` has an `id = 0`;
+  * `root->left` has `id_left = id * 2 - 1`;
+  * `root->right` has `id_right = id * 2 + 1`;
+* The method to decode the `id`'s to obtain width:
+  * `width = (max_id - min_id) / 2 + 1`
+* To avoid big number overflow, as `id*2` can grow the number exponentially, a countermeasure is to regulate the first node's `id` to `0` at each level.
+
+![maximum\_width\_of\_binary\_tree.cpp](.gitbook/assets/maximum_width_of_binary_tree.jpg)
+
+#### Sample Code:
+
+{% code title="maximum\_width\_of\_binary\_tree.cpp" %}
+```cpp
+public:
+    int widthOfBinaryTree(TreeNode* root) {
+        if (!root) return 0;
+        queue<pair<TreeNode*, int>> q; // pair.first: node, pair.second: id
+        q.push({root, 0});
+        int max_width = 0;
+        while (q.size() > 0) {
+            int n = q.size();
+            int min_id = 0x3f3f3f3f, max_id = 0xcfcfcfcf;
+            int offset = q.front().second; // an important offset to avoid big number overflow:
+                                           // basically set the first node's id to 0 in each row
+            for (int i = 0; i < n; i++) {
+                TreeNode* node = q.front().first;
+                int id = q.front().second;
+                q.pop();
+                min_id = min(min_id, id);
+                max_id = max(max_id, id);
+                if (node->left) q.push({node->left, (id-offset)*2-1});
+                if (node->right) q.push({node->right, (id-offset)*2+1});
+            }
+            max_width = max(max_width, (max_id-min_id)/2+1);
+        }
+        return max_width;
+    }
+};
+```
+{% endcode %}
+
+
+
