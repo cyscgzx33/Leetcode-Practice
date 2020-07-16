@@ -577,3 +577,76 @@ public:
 ```
 {% endcode %}
 
+## Type 4: Range DP
+
+### LeetCode 1130. Minimum Cost Tree From Leaf Values
+
+Given an array `arr` of positive integers, consider all binary trees such that:
+
+* Each node has either 0 or 2 children;
+* The values of `arr` correspond to the values of each **leaf** in an in-order traversal of the tree.  _\(Recall that a node is a leaf if and only if it has 0 children.\)_
+* The value of each non-leaf node is equal to the product of the largest leaf value in its left and right subtree respectively.
+
+Among all possible binary trees considered, return the smallest possible sum of the values of each non-leaf node.  It is guaranteed this sum fits into a 32-bit integer.
+
+**Example 1:**
+
+```text
+Input: arr = [6,2,4]
+Output: 32
+Explanation:
+There are two possible trees.  The first has non-leaf node sum 36, and the second has non-leaf node sum 32.
+
+    24            24
+   /  \          /  \
+  12   4        6    8
+ /  \               / \
+6    2             2   4
+```
+
+**Constraints:**
+
+* `2 <= arr.length <= 40`
+* `1 <= arr[i] <= 15`
+* It is guaranteed that the answer fits into a 32-bit signed integer \(ie. it is less than `2^31`\).
+
+Logic:
+
+* Range based DP: check this [dicussion](https://leetcode.com/problems/minimum-cost-tree-from-leaf-values/discuss/340033/C%2B%2B-with-comments) page, also the picture below
+
+![Leetcode 1130](.gitbook/assets/lc1130.jpg)
+
+{% code title="minimum\_cost\_tree\_from\_leaf\_values.cpp" %}
+```cpp
+class Solution {
+public:
+    int mctFromLeafValues(vector<int>& arr) {
+        int n = arr.size();
+        vector<vector<int>> m(n, vector<int>(n, 0)), dp(n, vector<int>(n, 0));
+
+        // construct max map
+        for (int i = 0; i < n; i++) {
+            m[i][i] = arr[i];
+            for (int j = i+1; j < n; j++) {
+                m[i][j] = max(m[i][j-1], arr[j]);
+            }
+        }
+
+        // construct dp
+        for (int l = 2; l <= n; l++) {
+            for (int i = 0; i < n; i++) {
+                int j = i + l - 1;
+                if (j >= n) continue;
+                dp[i][j] = 0x3f3f3f3f;
+                for (int k = i; k < j; k++) {
+                    dp[i][j] = min(dp[i][k] + dp[k+1][j] + m[i][k] * m[k+1][j], dp[i][j]);
+                }
+            }
+        }
+        
+        return dp[0][n-1];
+    }
+};
+```
+{% endcode %}
+
