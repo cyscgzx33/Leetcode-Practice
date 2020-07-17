@@ -548,5 +548,220 @@ public:
 ```
 {% endcode %}
 
+## Type 7: Inorder Traversal
 
+### LeetCode 94. Binary Tree Inorder Traversal
+
+Given a binary tree, return the _inorder_ traversal of its nodes' values.
+
+**Example:**
+
+```text
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+Output: [1,3,2]
+```
+
+**Follow up:** Recursive solution is trivial, could you do it iteratively?
+
+#### Logic:
+
+* Check in the code
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    vector<int> res;
+    void dfs(TreeNode* root) {
+        if (!root) return;
+        dfs(root->left);
+        res.push_back(root->val);
+        dfs(root->right);
+    }
+public:
+    /* method 1: recursion (trivial) */
+    vector<int> inorderTraversal(TreeNode* root) {
+        dfs(root);
+        return res;
+    }
+    
+    /* method 2: non-recursion */
+    vector<int> inorderTraversal(TreeNode* root) {
+        if (!root) return {};
+        stack<TreeNode*> s;
+        TreeNode* curr = root;
+        vector<int> res;
+        
+        /* Writing style 1: yusen's freestyle */
+        // initialization
+        while (curr) {
+            s.push(curr); // save and prepare to go to current world
+            curr = curr->left; // go to left next world
+        } // at some moment, curr is empty, that means curr is lost in some virtual world, it needs going back to a normal world back tracing through the stack
+        
+        // start iteration
+        while (s.size() > 0) {
+            // the first time officially looking at one node, take its value
+            curr = s.top(); s.pop();
+            res.push_back(curr->val);
+            if (curr->right) {
+                curr = curr->right;
+                while (curr) {
+                    s.push(curr);
+                    curr = curr->left;
+                }
+            }
+        }
+
+        /* Writing style 2-A: variation A of wikipedia */
+        while (s.size() > 0 || curr) {
+            while (curr) {
+                s.push(curr); // IMPORTANT: it is because we are going to next world, we store the current world
+                              //            NOT because it is empty we need to store it
+                curr = curr->left;
+            }
+            if (s.size() > 0) { // why we have to set a criteria judging is the stack is empty or not?
+                                // because "curr" might be after step 2 and goes to desitination of the whole program
+                                // actually not, check the variation B in the following
+                curr = s.top();
+                s.pop();
+                // when you came to an old world, you must do step 2 (simple, the only reason you go back is to resume tasks after step 1)
+                res.push_back(curr->val);
+                curr = curr->right;
+            }
+        }
+        
+        /* Writing style 2-B: variation B of wikipedia */
+        // An important question: why it is equivalent to style 3?
+        // Answer: it basically speeds up the first if in the style 3; and the reason why we don't need an "else" as it is in style 3 is that, since it will not enter into the "while (curr)" loop, it means !curr, which is the same as the style 3; and the reason why we don't have to worry about stack being empty? because one can suppose it never ends into "while (curr)" loop, then s.size()>0 must hold, because of the main loop criteria, or if it enters "while (curr)" loop, then it must help s accumulate some elements, thus s.size()>0 must hold. In conclusion, this style of writing is same as the style 3. 
+        while (s.size() > 0 || curr) {
+            while (curr) {    // Can I use if here? NO. 
+                s.push(curr); // IMPORTANT: it is because we are going to next world, we store the current world
+                              //            NOT because it is empty we need to store it
+                curr = curr->left;
+            }
+            curr = s.top();
+            s.pop();
+            // when you came to an old world, you must do step 2 (simple, the only reason you go back is to resume tasks after step 1)
+            res.push_back(curr->val);
+            curr = curr->right;
+        }
+
+        /* Writing style 3: exactly same as wikipedia */
+        while (s.size() > 0 || curr) {
+            if (curr) {
+                s.push(curr);
+                curr = curr->left;
+            } else {
+                curr = s.top(); s.pop();
+                res.push_back(curr->val);
+                curr = curr->right;
+            }
+        }
+
+        return res;
+    }
+};
+```
+
+### LeetCode 173. Binary Search Tree Iterator
+
+
+
+Implement an iterator over a binary search tree \(BST\). Your iterator will be initialized with the root node of a BST.
+
+Calling `next()` will return the next smallest number in the BST.
+
+* 
+**Example:**
+
+![](https://assets.leetcode.com/uploads/2018/12/25/bst-tree.png)
+
+```text
+BSTIterator iterator = new BSTIterator(root);
+iterator.next();    // return 3
+iterator.next();    // return 7
+iterator.hasNext(); // return true
+iterator.next();    // return 9
+iterator.hasNext(); // return true
+iterator.next();    // return 15
+iterator.hasNext(); // return true
+iterator.next();    // return 20
+iterator.hasNext(); // return false
+```
+
+**Note:**
+
+* `next()` and `hasNext()` should run in average O\(1\) time and uses O\(h\) memory, where h is the height of the tree.
+* You may assume that `next()` call will always be valid, that is, there will be at least a next smallest number in the BST when `next()` is called.
+
+#### Logic:
+
+* Use inorder traversal of course, but the style 3 \(check the previous puzzle, LC 94\) needs some change, so it's more like style 2; also the style 1 works, just a bit ugly
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class BSTIterator {
+private:
+    stack<TreeNode*> s;
+    TreeNode* curr;
+public:
+    BSTIterator(TreeNode* root) {
+        curr = root;
+    }
+
+    /** @return the next smallest number */
+    int next() {
+        /* style 2: vairation of wikipedia */
+        while (curr) {
+            s.push(curr);
+            curr = curr->left;
+        }
+        // it indicates curr is nullptr now
+        // it also indicates s is not empty
+        curr = s.top(); s.pop();
+        int res = curr->val;
+        curr = curr->right;
+        return res;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !s.empty() || curr;
+    }
+};
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * int param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
+```
 
