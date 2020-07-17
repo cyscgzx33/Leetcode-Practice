@@ -15,4 +15,5 @@
 * [Bit Operation](bit-operation.md)
 * [Sort](sort.md)
 * [Binary Index Tree \(BIT\)](binary-index-tree-bit.md)
+* [Greedy](greedy.md)
 
