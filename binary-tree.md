@@ -228,6 +228,86 @@ public:
 * [LeetCode 1028. Recover a Tree from Preorder Traversal](https://leetcode.com/problems/recover-a-tree-from-preorder-traversal/)
 * [LintCode 1307. Verify Preorder Sequence in Binary Search Tree](https://www.lintcode.com/problem/verify-preorder-sequence-in-binary-search-tree/description)
 
+### LeetCode 297.
+
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+**Example:** 
+
+```text
+You may serialize the following tree:
+
+    1
+   / \
+  2   3
+     / \
+    4   5
+
+as "[1,2,3,null,null,4,5]"
+```
+
+**Clarification:** The above format is the same as [how LeetCode serializes a binary tree](https://leetcode.com/faq/#binary-tree). You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+
+**Note:** Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
+
+#### Logic
+
+* Method 2: DFS \(preorder, recursive\)
+
+#### Sample Code
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+    /* Method 2: DFS (preorder, recursive) */
+    
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        if (!root) return "# ";
+        string out = to_string(root->val);
+        out += " ";
+        out += serialize(root->left);
+        out += serialize(root->right);
+        
+        return out;
+    }
+    
+    TreeNode* deserialize(stringstream& os) {
+        string node;
+        os >> node;
+        if (node == "#") return nullptr;
+        TreeNode* root = new TreeNode(stoi(node));
+        root->left = deserialize(os);
+        root->right = deserialize(os);
+
+        return root;
+    }
+    
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        stringstream os;
+        os << data << endl;
+        
+        return deserialize(os);
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
+```
+
 ## Type 3: General
 
 ### LeetCode 226. Invert Binary Tree
@@ -547,6 +627,104 @@ public:
 };
 ```
 {% endcode %}
+
+### LeetCode 297. Serialize and Deserialize Binary Tree
+
+Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
+
+Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how your serialization/deserialization algorithm should work. You just need to ensure that a binary tree can be serialized to a string and this string can be deserialized to the original tree structure.
+
+**Example:** 
+
+```text
+You may serialize the following tree:
+
+    1
+   / \
+  2   3
+     / \
+    4   5
+
+as "[1,2,3,null,null,4,5]"
+```
+
+**Clarification:** The above format is the same as [how LeetCode serializes a binary tree](https://leetcode.com/faq/#binary-tree). You do not necessarily need to follow this format, so please be creative and come up with different approaches yourself.
+
+**Note:** Do not use class member/global/static variables to store states. Your serialize and deserialize algorithms should be stateless.
+
+#### Logic
+
+* Method 1: BFS
+
+#### Sample Code
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Codec {
+public:
+    /* Method 1: BFS */
+    
+    // Encodes a tree to a single string.
+    string serialize(TreeNode* root) {
+        queue<TreeNode*> q({root});
+        string out;
+
+        while (q.size() > 0) {
+            int n = q.size();
+            for (int i = 0; i < n; i++) {
+                auto curr = q.front(); q.pop();
+                if (!curr) out += "# ";
+                else {
+                    out += to_string(curr->val);
+                    out += " ";
+                    q.push(curr->left);
+                    q.push(curr->right);
+                }
+            }
+        }
+        return out;
+    }
+
+    // Decodes your encoded data to tree.
+    TreeNode* deserialize(string data) {
+        stringstream os;
+        os << data << endl;
+
+        TreeNode* dummy = new TreeNode(0);
+        queue<TreeNode*> q({dummy});
+        string node;
+        bool is_right = true;
+        while (os >> node) {
+            TreeNode* curr = q.front();
+            TreeNode* child = nullptr;
+            if (node != "#") {
+                child = new TreeNode(stoi(node));
+                q.push(child);
+            }
+            if (is_right) {
+                curr->right = child;
+                q.pop(); // only pop when the right child is found
+            }
+            else curr->left = child;
+            is_right = !is_right;
+        }
+        
+        return dummy->right;
+    }
+};
+
+// Your Codec object will be instantiated and called as such:
+// Codec codec;
+// codec.deserialize(codec.serialize(root));
+```
 
 ## Type 7: Inorder Traversal
 
