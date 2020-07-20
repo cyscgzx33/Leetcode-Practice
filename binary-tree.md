@@ -943,3 +943,83 @@ public:
  */
 ```
 
+### LeetCode 297. Construct binary tree from preorder and inorder traversal
+
+Given preorder and inorder traversal of a tree, construct the binary tree.
+
+**Note:**  
+You may assume that duplicates do not exist in the tree.
+
+For example, given
+
+```text
+preorder = [3,9,20,15,7]
+inorder = [9,3,15,20,7]
+```
+
+Return the following binary tree:
+
+```text
+    3
+   / \
+  9  20
+    /  \
+   15   7
+```
+
+Logic
+
+* Method: divide and conquer with partition: refer to this [discuss page](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/discuss/34543/Simple-O%28n%29-without-map) for details
+* We aim at partition the `preorder` and `inorder` into 3 parts:
+  * root: the start position of `preorder` is exactly the root; need to find the position of inorder by this root value
+  * left: the left part is anything to the left side of the root position of `inorder`; the `preorder` share the **same length**
+  * right: the right part is anything to the right side of the root position of `inorder`; in the `preorder`, the right part indicates anything that is on the right side of the left part
+* Note: we must use **two different sets of start / end pointers** for `preorder` and `inorder`, as the two arrays might not align with each other all the time
+* Check the picture below for further details
+
+![LC 105](.gitbook/assets/lc105.jpg)
+
+#### Sample Code
+
+```cpp
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    
+    TreeNode* buildTree(vector<int>& preorder, int ps, int pe,
+                        vector<int>& inorder, int is, int ie) {
+        // Step 0: exit criteria
+        if (ps > pe || is > ie) return nullptr;
+        
+        // Step 1: the starting position of preorder must be the root
+        TreeNode* root = new TreeNode(preorder[ps]);
+        
+        // Step 2: find the root node in inorder
+        //         then the LEFT part is left subtree, RIGHT part is right subtree
+        int i_root = is;
+        for (int i = is; i <= ie; i++) if (inorder[i] == preorder[ps]) i_root = i;
+        
+        // Step 3: recursively iterate LEFT and RIGHT by partitioning preorder and inorder vectors
+        int l_len = i_root - is; // length of the left subtree
+        root->left = buildTree(preorder, ps + 1, ps + l_len, inorder, is, i_root-1);
+        root->right = buildTree(preorder, ps + l_len + 1, pe, inorder, i_root+1, ie);
+        
+        return root;
+    }
+    
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        return buildTree(preorder, 0, preorder.size()-1, inorder, 0, inorder.size()-1);
+    }
+};
+```
+
