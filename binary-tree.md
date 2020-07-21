@@ -42,6 +42,7 @@ Output: 42
   * Must have: `root->val`
   * Could have: max of `left_sum` and `right_sum`, while the max must be larger than `0`
 * Update \(2\) global max:
+  * Key point: when updating global max, **`root->val` must be counted**!
   *  understanding 1 - take `max()`among the four choices:
     * `root->val`
     * `root->val + left_sum`
