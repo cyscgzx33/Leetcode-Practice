@@ -650,3 +650,96 @@ public:
 ```
 {% endcode %}
 
+## Type 5: Buy-Stock-Series
+
+### LeetCode 121. Best Time to Buy and Sell Stocks
+
+Say you have an array for which the _i_th element is the price of a given stock on day _i_.
+
+If you were only permitted to complete at most one transaction \(i.e., buy one and sell one share of the stock\), design an algorithm to find the maximum profit.
+
+Note that you cannot sell a stock before you buy one.
+
+**Example 1:**
+
+```text
+Input: [7,1,5,3,6,4]
+Output: 5
+Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+             Not 7-1 = 6, as selling price needs to be larger than buying price.
+```
+
+**Example 2:**
+
+```text
+Input: [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+```
+
+#### Logic:
+
+* Method 1: pfsum
+* Method 2: DP
+* Method 2-b: DP variant \(Kadane's algorithm\)
+
+```cpp
+class Solution {
+public:
+    
+    /* Method 1: prefix sum */
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() == 0) return 0;
+        
+        int profit = 0;
+        int min_pr = prices[0];
+        
+        for (auto pr : prices) {
+            profit = max(profit, pr - min_pr);
+            min_pr = min(min_pr, pr);
+        }
+        
+        return profit;
+    }
+    
+    /* Method 2: dp */
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() == 0) return 0;
+        int n = prices.size();
+        vector<int> dp(n, 0); // dp[i]: max subarray sum between [0, ..., i], which is the max profit
+        dp[0] = 0;
+        int profit = 0;
+        
+        // state transition: dp[i] = prices[i] - prices[i-1] + (dp[i-1] > 0 ? dp[i-1] : 0)
+        for (int i = 1; i < n; i++) {
+            dp[i] = prices[i] - prices[i-1] + (dp[i-1] > 0 ? dp[i-1] : 0);
+            profit = max(profit, dp[i]);
+        }
+        
+        return profit;
+    }
+    
+    /* Method 2-b: dp variant (Kadane's algorithm) */
+    // difference between maximum subarray sum:
+    // here in this question: since we have to get prices[i] - prices[j] > 0 as the output,
+    //                        prices[j] shall at least take one valid value, which is prices[0].
+    //                        i.e., the valid "subarray sum" starting point is from second value of the initial array (subtract by prices array), 
+    //                        which is prices[2] - prices[1]
+    //                        that's why  dp[0] = 0, because we will NOT going to use the invalid subarray sum prices[0] (yes, it is a sum!)
+    //                        then why the profit is initialized to 0? That's easy, because the minimum profit shall be 0.
+    
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() == 0) return 0;
+        int n = prices.size();
+        int curr_max = 0, profit = 0;
+        
+        for (int i = 1; i < n; i++) {
+            curr_max = prices[i] - prices[i-1] + (curr_max > 0 ? curr_max : 0);
+            profit = max(profit, curr_max);
+        }
+        
+        return profit;
+    }
+};
+```
+
