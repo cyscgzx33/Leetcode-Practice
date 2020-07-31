@@ -648,7 +648,7 @@ public:
 ```
 {% endcode %}
 
-## Type 5: Buy-Stock-Series
+## Type 5: Buy-Stock Series
 
 ### LeetCode 121. Best Time to Buy and Sell Stocks
 
@@ -790,6 +790,97 @@ public:
         }
         
         return max(s0[n-1], s2[n-1]);
+    }
+};
+```
+
+### LeetCode 123. Best Time to Buy and Sell Stock III
+
+Say you have an array for which the _i_th element is the price of a given stock on day _i_.
+
+Design an algorithm to find the maximum profit. You may complete at most _two_ transactions.
+
+**Note:** You may not engage in multiple transactions at the same time \(i.e., you must sell the stock before you buy again\).
+
+**Example 1:**
+
+```text
+Input: [3,3,5,0,0,3,1,4]
+Output: 6
+Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+             Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+```
+
+**Example 2:**
+
+```text
+Input: [1,2,3,4,5]
+Output: 4
+Explanation: Buy on day 1 (price = 1) and sell on day 5 (price = 5), profit = 5-1 = 4.
+             Note that you cannot buy on day 1, buy on day 2 and sell them later, as you are
+             engaging multiple transactions at the same time. You must sell before buying again.
+```
+
+**Example 3:**
+
+```text
+Input: [7,6,4,3,1]
+Output: 0
+Explanation: In this case, no transaction is done, i.e. max profit = 0.
+```
+
+#### Logic:
+
+* Refer to [this page](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/discuss/135704/Detail-explanation-of-DP-solution) for referece
+* DP details:
+  1. definition: `dp[k][i]`is the maximum profit for k transactions, by the end of i-th day 
+  2. state transition: `dp[k][i] = max(dp[k][i-1], max{0<=j<i}(prices[i] - prices[j] + dp[k-1][j-1]))`
+  3. initial: 
+     * `dp[0][i] = 0; // conducting 0 transactions leeds to no profit`
+     * `dp[k][-1] = 0; // conducting inf transactions on no day leeds to no profit`
+     * `dp[k][0] = 0; // conducting inf transactions on day 0 leeds to no profit`
+  4. order: `k` -&gt; `i`
+* Tricks:
+  1. In implementation, we can denote `min_cost[j] := prices[j] - dp[k-1][j-1]` to save computation costs, during each loop of `i`
+  2. In calculating `max{0<=j<i}(prices[i] - prices[j] + dp[k-1][j-1])` we used the face that actually `j` can be `i` as well, as the one more extra item `prices[i] - prices[j] + dp[k-1, j] = dp[k-1, i]` is the case we use one chance of transaction doing nothing \(it's stupid but allowed\).
+
+```cpp
+class Solution {
+public:
+    /* Method 1: 2D DP (TLE) */
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() == 0) return 0;
+        int n = prices.size();
+        vector<vector<int>> dp(3, vector<int>(n, 0));
+        
+        for (int k = 1; k <= 2; k++) {
+            for (int i = 1; i < n; i++) {
+                int max_val = prices[i] - prices[0]; // we can claim that all the dp[k][-1] = 0
+                for (int j = 1; j < i; j++) max_val = max(max_val, prices[i] - prices[j] + dp[k-1][j-1]);
+                dp[k][i] = max(max_val, dp[k][i-1]);
+            }
+        }
+        
+        return dp[2][n-1];
+    }
+
+    /* Method 1-b: 2D DP variant 1 */
+    int maxProfit(vector<int>& prices) {
+        if (prices.size() == 0) return 0;
+        int n = prices.size();
+        vector<vector<int>> dp(3, vector<int>(n, 0));
+        
+        for (int k = 1; k <= 2; k++) {
+            vector<int> min_cost(n, 0);
+            min_cost[0] = prices[0]; // we want to denote min_cost[j] := prices[j] - dp[k-1][j-1]
+                                     // remember: dp[k][-1] = 0, for all k >= 0
+            for (int i = 1; i < n; i++) {
+                min_cost[i] = min(min_cost[i-1], prices[i] - dp[k-1][i-1]);
+                dp[k][i] = max(prices[i] - min_cost[i], dp[k][i-1]);
+            }
+        }
+        
+        return dp[2][n-1];
     }
 };
 ```
