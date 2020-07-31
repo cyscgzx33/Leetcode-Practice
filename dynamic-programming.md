@@ -765,6 +765,7 @@ Explanation: transactions = [buy, sell, cooldown, buy, sell]
   * `s0[0] = 0; // since it's rest, nothing happens`
   * `s1[0] = -prices[0]; // since we bought something, we cut the thing, prices[0]`
   * `s2[0] = -inf; // (0xcfcfcfcf, or INT_MIN) nothing sold yet, later need to use max()`
+* since the maximum profit will only result from in the `rest` state of `sold` state \(not in a `bought` state, be positive!\), thus the final result is `max(s0[n-1], s2[n-1)`
 
 ![LC 309](.gitbook/assets/lc309.jpg)
 
@@ -881,6 +882,65 @@ public:
         }
         
         return dp[2][n-1];
+    }
+};
+```
+
+### LeetCode 188. Best Time to Buy and Sell Stock IV
+
+Say you have an array for which the i-th element is the price of a given stock on day i.
+
+Design an algorithm to find the maximum profit. You may complete at most **k** transactions.
+
+**Note:**  
+You may not engage in multiple transactions at the same time \(ie, you must sell the stock before you buy again\).
+
+**Example 1:**
+
+```text
+Input: [2,4,1], k = 2
+Output: 2
+Explanation: Buy on day 1 (price = 2) and sell on day 2 (price = 4), profit = 4-2 = 2.
+```
+
+**Example 2:**
+
+```text
+Input: [3,2,6,5,0,3], k = 2
+Output: 7
+Explanation: Buy on day 2 (price = 2) and sell on day 3 (price = 6), profit = 6-2 = 4.
+             Then buy on day 5 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+```
+
+#### Logic
+
+* Use the exactly same method as the LeetCode 188
+* Trick
+  1. Since a transaction of buying and selling a stock needs **at least two days**, thus, `k = min(n/2, k)` which is a good cutting branch technique
+
+```cpp
+class Solution {
+public:
+    
+    /* Method 1: 2D DP (same as BTBS III) */
+    int maxProfit(int k, vector<int>& prices) {
+        if (prices.size() == 0) return 0;
+        int n = prices.size();
+        k = min(n/2, k); // a transaction of buying and selling a stock needs at least 2 days
+        vector<vector<int>> dp(k+1, vector<int>(n, 0));
+        
+        for (int m = 1; m <= k; m++) {
+            vector<int> min_cost(n, 0);
+            min_cost[0] = prices[0];
+            for (int i = 1; i < n; i++) {
+                min_cost[i] = min(min_cost[i-1], prices[i] - dp[m-1][i-1]);
+                dp[m][i] = max(dp[m][i-1], prices[i] - min_cost[i]);
+            }
+        }
+
+        int res = 0;
+        for (int m = 0; m <= k; m++) res = max(res, dp[m][n-1]);
+        return res;
     }
 };
 ```
