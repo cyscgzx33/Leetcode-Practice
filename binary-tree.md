@@ -43,6 +43,7 @@ Output: 42
   * Could have: max of `left_sum` and `right_sum`, while the max must be larger than `0`
 * Update \(2\) global max:
   * Key point: when updating global max, **`root->val` must be counted**!
+    * Reason: because for any valid path, there must at least exist one node. If we don't include `root->val`, there's chance that both left and right have no nodes, which will return 0, and that is the unwanted case we'd like to avoid. Thus, `root->val` must be counted.
   *  understanding 1 - take `max()`among the four choices:
     * `root->val`
     * `root->val + left_sum`
