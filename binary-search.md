@@ -380,7 +380,7 @@ If there are several possible values for _h_, the maximum one is taken as the h-
 * Take care of the final check:
   * Firstly check the most aggressive H-index proposal, which is `l`
   * Secondly check the milder H-index proposal, which is `r`
-  * Thirdly \(don't forget this!\), if the `r` check is failed, which will only happen in 1- or 2-element cases, then the final result should be `n - r - 1` , which shall be `0` actually.
+  * Thirdly **\(don't forget this!\)**, if the `r` check is failed, which will only happen in 1- or 2-element cases, then the final result should be `n - r - 1` , which shall be `0` actually.
 
 #### Sample Code:
 
