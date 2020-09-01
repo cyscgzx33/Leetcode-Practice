@@ -263,8 +263,6 @@ public:
 
 ### LeetCode 952. Largest Component Size by Common Factor
 
-
-
 Given a non-empty array of unique positive integers `A`, consider the following graph:
 
 * There are `A.length` nodes, labelled `A[0]` to `A[A.length - 1];`
