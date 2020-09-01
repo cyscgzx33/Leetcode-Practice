@@ -270,7 +270,6 @@ Given a non-empty array of unique positive integers `A`, consider the following 
 
 Return the size of the largest connected component in the graph.
 
-1. 
 **Example 1:**
 
 ```text
