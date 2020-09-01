@@ -261,3 +261,120 @@ public:
 ```
 {% endcode %}
 
+### LeetCode 952. Largest Component Size by Common Factor
+
+
+
+Given a non-empty array of unique positive integers `A`, consider the following graph:
+
+* There are `A.length` nodes, labelled `A[0]` to `A[A.length - 1];`
+* There is an edge between `A[i]` and `A[j]` if and only if `A[i]` and `A[j]` share a common factor greater than 1.
+
+Return the size of the largest connected component in the graph.
+
+1. 
+**Example 1:**
+
+```text
+Input: [4,6,15,35]
+Output: 4
+
+```
+
+**Example 2:**
+
+```text
+Input: [20,50,9,63]
+Output: 2
+
+```
+
+**Example 3:**
+
+```text
+Input: [2,3,6,7,4,12,21,39]
+Output: 8
+
+```
+
+**Note:**
+
+1. `1 <= A.length <= 20000`
+2. `1 <= A[i] <= 100000`
+
+#### Logic:
+
+* Find factors \(or prime factors\) of each element in `A`, connect them from back to front
+* At each front element, add `dim` to calculate the `max_dim`
+* For the dimension calculation, always find the father of it, instead of itself
+* The sample code shows the non-prime-factor version, while the prime-factor version is almost the same
+
+#### Sample Code:
+
+```cpp
+class Solution {
+private:
+    int father[100001];
+    int dim[100001];
+    int max_dim = 1;
+    
+    int find(int x) {
+        int j = x, fx = x;
+        while (j != father[j]) {
+            j = father[j];
+        }
+        
+        while (j != x) {
+            fx = father[x];
+            father[x] = j;
+            x = fx;
+        }
+        
+        return j;
+    }
+    
+    void connect(int a, int b) {
+        int root_a = find(a);
+        int root_b = find(b);
+        
+        if (root_a != root_b) {
+            father[root_b] = root_a;
+            dim[root_a] += dim[root_b];
+            dim[root_b] = 0;
+        }
+    }
+    
+    vector<int> getFactors(int x) {
+        vector<int> res;
+        for (int i = 2; i * i <= x; i++) {
+            if (x % i == 0) {
+                res.push_back(i);
+                res.push_back(x/i);
+            }
+        }
+        res.push_back(x);
+        return res;
+    }
+public:
+    int largestComponentSize(vector<int>& A) {
+        for (int i = 0; i <= 100000; i++) {
+            father[i] = i;
+            dim[i] = 0;
+        }
+        
+        for (auto a : A) {
+            vector<int> factors = getFactors(a);
+            for (int i = factors.size()-1; i > 0; i--) {
+                connect(factors[i], factors[i-1]);
+            }
+            dim[find(factors[0])]++;
+            max_dim = max(dim[find(factors[0])], max_dim);
+        }
+        
+        return max_dim;
+    }
+};
+```
+
+
+
