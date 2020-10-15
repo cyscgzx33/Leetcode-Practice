@@ -150,6 +150,85 @@ public:
 ```
 {% endcode %}
 
+### LeeTcode 189: Rotate Array
+
+Given an array, rotate the array to the right by _k_ steps, where _k_ is non-negative.
+
+**Follow up:**
+
+* Try to come up as many solutions as you can, there are at least 3 different ways to solve this problem.
+* Could you do it in-place with O\(1\) extra space?
+
+**Example 1:**
+
+```text
+Input: nums = [1,2,3,4,5,6,7], k = 3
+Output: [5,6,7,1,2,3,4]
+Explanation:
+rotate 1 steps to the right: [7,1,2,3,4,5,6]
+rotate 2 steps to the right: [6,7,1,2,3,4,5]
+rotate 3 steps to the right: [5,6,7,1,2,3,4]
+```
+
+**Example 2:**
+
+```text
+Input: nums = [-1,-100,3,99], k = 2
+Output: [3,99,-1,-100]
+Explanation: 
+rotate 1 steps to the right: [99,-1,-100,3]
+rotate 2 steps to the right: [3,99,-1,-100]
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 2 * 104`
+* `-231 <= nums[i] <= 231 - 1`
+* `0 <= k <= 105`
+
+#### Logic:
+
+* Swap + Filp
+* Depending on the relative positioning of `l` and `r`, the flips have different orders
+
+![LC 189](.gitbook/assets/lc189.jpg)
+
+#### Code:
+
+```cpp
+class Solution {
+public:
+    void flip(vector<int>& nums, int start, int end) {
+        while (start <= end)
+            swap(nums[start++], nums[end--]);
+    }
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        k %= n;
+        if (k == 0) return;
+        
+        // swap the interested part
+        int l = 0, r = n-1;
+        for (int i = 0; i < k; i++)
+            swap(nums[l++], nums[r--]);
+        
+        // Scenarios: based on different situations of l and r, the flip orders differ
+        // case I: l <= r
+        if (l <= r) {
+            flip(nums, 0, l-1);
+            flip(nums, l, r);
+            flip(nums, l, n-1);
+        }
+        // case II: l > r
+        else {
+            flip(nums, r+1, l-1);
+            flip(nums, l, n-1);
+            flip(nums, 0, l-1);
+        }
+    }
+};
+```
+
 ## Type 3: Same Direction Two-pointers / Sliding Window
 
 ### LeetCode 992: Subarrays with K Different Integers
