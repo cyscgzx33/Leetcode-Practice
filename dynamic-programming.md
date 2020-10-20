@@ -1065,3 +1065,99 @@ public:
 };
 ```
 
+## Type 6: Counting-related DP
+
+### LeetCode 1621. Number of Sets of K Non-Overlapping Line Segments
+
+
+
+Given `n` points on a 1-D plane, where the `ith` point \(from `0` to `n-1`\) is at `x = i`, find the number of ways we can draw **exactly** `k` **non-overlapping** line segments such that each segment covers two or more points. The endpoints of each segment must have **integral coordinates**. The `k` line segments **do not** have to cover all `n` points, and they are **allowed** to share endpoints.
+
+Return _the number of ways we can draw_ `k` _non-overlapping line segments._ Since this number can be huge, return it **modulo** `109 + 7`.
+
+**Example 1:**![](https://assets.leetcode.com/uploads/2020/09/07/ex1.png)
+
+```text
+Input: n = 4, k = 2
+Output: 5
+Explanation: 
+The two line segments are shown in red and blue.
+The image above shows the 5 different ways {(0,2),(2,3)}, {(0,1),(1,3)}, {(0,1),(2,3)}, {(1,2),(2,3)}, {(0,1),(1,2)}.
+```
+
+**Example 2:**
+
+```text
+Input: n = 3, k = 1
+Output: 3
+Explanation: The 3 ways are {(0,1)}, {(0,2)}, {(1,2)}.
+```
+
+**Example 3:**
+
+```text
+Input: n = 30, k = 7
+Output: 796297179
+Explanation: The total number of possible ways to draw 7 line segments is 3796297200. Taking this number modulo 109 + 7 gives us 796297179.
+```
+
+**Example 4:**
+
+```text
+Input: n = 5, k = 3
+Output: 7
+```
+
+**Example 5:**
+
+```text
+Input: n = 3, k = 2
+Output: 1
+```
+
+**Constraints:**
+
+* `2 <= n <= 1000`
+* `1 <= k <= n-1`
+
+#### Logic:
+
+* The answer is `C(n+k-1, 2*k)`
+* Check [lee215's post](https://leetcode.com/problems/number-of-sets-of-k-non-overlapping-line-segments/discuss/898830/Python-O%28N%29-Solution-with-Prove) for reference
+* Use [Yang's Triangular ](https://zhuanlan.zhihu.com/p/74787475)to calculate **combination numbers**, which is modulo-proof. That is, this method can represent ANY integer with modulo applied.
+
+![Conversion of counting segments into counting points](.gitbook/assets/image%20%283%29.png)
+
+#### Sample Code
+
+```cpp
+class Solution {
+private:
+    bool init = false;
+    int modulo = pow(10,9) + 7;
+    int dp[2000][2000];
+public:
+    // construct dp (Yang's triangle)
+    // C(m, n) = C(m-1, n-1) + C(m-1, n)
+    // dp[m][n] == C(m, n)
+    void buildDP() {
+        for (int i = 0; i < 2000; i++) {
+            for (int j = 0; j <= i; j++) {
+                if (j == 0 || i == 0 || i == j) {
+                    dp[i][j] = 1;
+                    continue;
+                }
+                dp[i][j] = ( dp[i-1][j-1] + dp[i-1][j] ) % modulo;
+            }
+        }
+        init = true;
+    }
+    
+    int numberOfSets(int n, int k) {
+        if (!init) buildDP();
+        // check lee215's answer
+        return dp[n+k-1][2*k];
+    }
+};
+```
+
