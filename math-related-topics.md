@@ -282,3 +282,99 @@ public:
 ```
 {% endcode %}
 
+## Type 3: **Miscellaneous**
+
+### **LeetCode 229.** Majority Element II
+
+Given an integer array of size `n`, find all elements that appear more than `⌊ n/3 ⌋` times.
+
+**Follow-up:** Could you solve the problem in linear time and in O\(1\) space?
+
+**Example 1:**
+
+```text
+Input: nums = [3,2,3]
+Output: [3]
+```
+
+**Example 2:**
+
+```text
+Input: nums = [1]
+Output: [1]
+```
+
+**Example 3:**
+
+```text
+Input: nums = [1,2]
+Output: [1,2]
+```
+
+**Constraints:**
+
+* `1 <= nums.length <= 5 * 104`
+* `-109 <= nums[i] <= 109`
+
+#### Logic:
+
+* A famous algorithm: [Boyer-Moore Voting Algorithm](https://apps.dtic.mil/dtic/tr/fulltext/u2/a131702.pdf) \(directly applying this algorithm can solve [LeetCode 169. Majority Element](https://leetcode.com/problems/majority-element/)\)
+* Extend the algorithm above from 1 dimension to 2 dimension.
+
+![Proof of Boyer-Moore Voting Algorithm for Dim == 2](.gitbook/assets/image%20%284%29.png)
+
+```cpp
+class Solution {
+public:
+    vector<int> majorityElement(vector<int>& nums) {
+        int cdd1 = -1, cdd2 = -1; // candidate 1 and 2, -1 means no candidate
+        int cnt1 = 0, cnt2 = 0; // count for candidate 1 and 2
+        
+        for (auto n : nums) {
+            if (cnt1 > 0 && cnt2 > 0) {
+                if (cdd1 != n && cdd2 != n) { // new num
+                    if (--cnt1 == 0) cdd1 = -1;
+                    if (--cnt2 == 0) cdd2 = -1;
+                }
+                else if (cdd1 == n) cnt1++;
+                else if (cdd2 == n) cnt2++;
+            }
+            else if (cnt1 > 0) {
+                if (n == cdd1) cnt1++;
+                else {
+                    cnt2++;
+                    cdd2 = n;
+                }
+            }
+            else if (cnt2 > 0) {
+                if (n == cdd2) cnt2++;
+                else {
+                    cnt1++;
+                    cdd1 = n;
+                }
+            }
+            else { // cnt1 == 0 && cnt2 == 0
+                cnt1++;
+                cdd1 = n;
+            }
+        }
+        
+        // NEED TO RE-COUNT
+        cnt1 = 0, cnt2 = 0;
+        for (auto n : nums) {
+            if (n == cdd1) cnt1++;
+            else if (n == cdd2) cnt2++;
+        }
+        
+        int n = nums.size();
+        vector<int> res;
+        if (cnt1 > n/3) res.push_back(cdd1);
+        if (cnt2 > n/3) res.push_back(cdd2);
+        
+        return res;
+    }
+};
+```
+
+
+
